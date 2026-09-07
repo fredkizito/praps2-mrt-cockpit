@@ -1,8 +1,8 @@
 {
   "country_name": "Mauritania",
   "country_iso": "MRT",
-  "ndvi_csv": "/mnt/user-data/uploads/mrt-ndvi-subnat-full.csv",
-  "rainfall_csv": "/mnt/user-data/uploads/mrt-rainfall-subnat-full.csv",
+  "ndvi_csv": "data/ndvi.csv",
+  "rainfall_csv": "data/rainfall.csv",
   "season_start": "2026-06-01",
   "pcode_to_name_adm1": {
     "MR01": "Hodh Chargui",
