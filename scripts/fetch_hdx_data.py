@@ -61,7 +61,16 @@ def get_resource_url(dataset_id, name_contains):
 
 
 def download(url, out_path):
-    resp = requests.get(url, headers=HEADERS, timeout=120, stream=True)
+    # Cache-busting: append a timestamp query param and disable caching
+    # headers, in case a CDN/proxy between us and HDX serves a stale
+    # cached copy of the file even after the underlying resource has
+    # actually changed.
+    import time
+    sep = "&" if "?" in url else "?"
+    cache_busted_url = f"{url}{sep}_cb={int(time.time())}"
+    no_cache_headers = dict(HEADERS, **{"Cache-Control": "no-cache", "Pragma": "no-cache"})
+
+    resp = requests.get(cache_busted_url, headers=no_cache_headers, timeout=120, stream=True)
     resp.raise_for_status()
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "wb") as f:
