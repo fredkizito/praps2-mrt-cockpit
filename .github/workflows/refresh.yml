@@ -76,9 +76,6 @@ jobs:
             --template cockpit/cockpit_template.html \
             --bundle cockpit/bundle.json \
             --out cockpit/praps2_cockpit_v2.html
-          # Netlify needs a clean folder with just the page it should serve
-          # at the site root - not the working directory, which also holds
-          # bundle.json/admin1.json etc. that don't need to be public files.
           mkdir -p deploy
           cp cockpit/praps2_cockpit_v2.html deploy/index.html
 
@@ -101,9 +98,6 @@ jobs:
             --prev output/state_MRT_previous.json \
             --curr "$LATEST_STATE" \
             --slack-webhook "$SLACK_WEBHOOK_URL"
-          # alert_bot.py treats an empty --slack-webhook string as "not provided"
-          # and falls back to dry-run printing, so this step is safe to leave
-          # in even before you've added the SLACK_WEBHOOK_URL secret.
 
       - name: Commit refreshed data back to the repo
         if: steps.bundle.outputs.changed == 'true'
@@ -112,33 +106,21 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add output/ cockpit/bundle.json cockpit/praps2_cockpit_v2.html
           git commit -m "Automated dekadal refresh: $(date -u +%Y-%m-%d)" || echo "Nothing to commit"
-          # Retry pull+push a few times in case main moves between our pull
-          # and our push (e.g. someone editing files on GitHub.com at the
-          # same time this job is running) - a single attempt can lose this
-          # race even with --rebase, if the remote changes again in the
-          # narrow window between the pull and the push.
           for i in 1 2 3 4 5; do
-            git pull --rebase -X ours origin main
-            if git push; then
-              echo "Push succeeded on attempt $i"
-              break
+            git fetch origin main
+            if git merge -X ours origin/main --no-edit; then
+              if git push; then
+                echo "Push succeeded on attempt $i"
+                break
+              fi
+            else
+              echo "Merge conflict on attempt $i - aborting and retrying"
+              git merge --abort || true
             fi
-            echo "Push attempt $i failed, retrying in 5s..."
+            echo "Retrying in 5s..."
             sleep 5
           done
 
-      # --- Deploy option A: Netlify is Git-linked to this repo -----------
-      # If your Netlify site was created via "Import from Git" and points
-      # at this repository/branch, the git push above is ALL you need -
-      # Netlify picks up the change and redeploys automatically. Delete
-      # the "Deploy to Netlify directly" step below in that case.
-
-      # --- Deploy option B: direct deploy (site was drag-and-dropped) ----
-      # Use this if your Netlify site is NOT connected to this repo (e.g.
-      # it was created by dragging a file into Netlify Drop, as the first
-      # version of this cockpit was). Requires two repo secrets:
-      #   NETLIFY_AUTH_TOKEN  - Netlify user settings -> Applications -> New access token
-      #   NETLIFY_SITE_ID     - Netlify site settings -> Site details -> Site ID
       - name: Debug - confirm Netlify secrets actually reach this job
         if: steps.bundle.outputs.changed == 'true'
         env:
@@ -155,9 +137,6 @@ jobs:
           else
             echo "NETLIFY_SITE_ID: present, value=$NSI"
           fi
-          # Site ID is an identifier, not a credential - safe to print outright,
-          # and doing so lets us confirm it's an actual site UUID, not the
-          # site's display name pasted in by mistake (a common mix-up).
 
       - name: Deploy to Netlify directly
         if: steps.bundle.outputs.changed == 'true'
