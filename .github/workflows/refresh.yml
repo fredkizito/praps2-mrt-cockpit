@@ -64,6 +64,7 @@ jobs:
             --prev-state output/state_MRT_previous.json \
             --admin1-geo cockpit/admin1.json \
             --admin2-geo cockpit/admin2.json \
+            --fetch-manifest data/fetch_manifest.json \
             --out-dir output \
             --bundle-out cockpit/bundle.json
           echo "changed=$(cat bundle_changed.flag)" >> "$GITHUB_OUTPUT"
