@@ -117,8 +117,9 @@ def build_packet(state, prev_state, out_path):
 
     add_heading(doc, "4. Dekad-on-Dekad Change Log (Forward-Looking Signal)", level=1)
     if prev_state:
-        import sys
-        sys.path.insert(0, "../bot")
+        import sys, os
+        bot_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "bot")
+        sys.path.insert(0, bot_dir)
         from alert_bot import diff_states
         alerts = diff_states(prev_state, state, key="wilaya", level="admin1")
         if alerts:
