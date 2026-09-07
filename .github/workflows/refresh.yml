@@ -1,0 +1,139 @@
+name: PRAPS2 dekadal refresh
+
+# Runs automatically a couple of days after each HDX dekad publication
+# (dekads land on/around the 1st, 11th, and 21st of each month); also
+# runs immediately whenever fresh CSVs are dropped into data/manual/
+# (see data/manual/README.md - the fallback path if automated fetch
+# from HDX isn't working); and can be triggered manually for testing.
+on:
+  schedule:
+    - cron: "0 6 3,13,23 * *"   # 06:00 UTC on the 3rd/13th/23rd - a 2-day buffer after each dekad
+  push:
+    paths:
+      - "data/manual/**"         # manual CSV drop - see data/manual/README.md
+  workflow_dispatch: {}          # manual "Run workflow" button
+
+permissions:
+  contents: write               # needed to commit the refreshed state/cockpit back to the repo
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install pandas numpy requests
+
+      - name: Use manual CSVs if present, otherwise fetch from HDX
+        run: |
+          mkdir -p data
+          if [ -f data/manual/ndvi.csv ] && [ -f data/manual/rainfall.csv ]; then
+            echo "Found manually-uploaded CSVs in data/manual/ - using those."
+            cp data/manual/ndvi.csv data/ndvi.csv
+            cp data/manual/rainfall.csv data/rainfall.csv
+          else
+            echo "No manual CSVs found - fetching from HDX automatically."
+            python3 scripts/fetch_hdx_data.py --out-dir data
+          fi
+
+      - name: Locate previous state (for the alert diff)
+        id: prev
+        run: |
+          if [ -f output/state_MRT_latest.json ]; then
+            cp output/state_MRT_latest.json output/state_MRT_previous.json
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build state + bundle from fresh data
+        id: bundle
+        run: |
+          python3 scripts/build_bundle.py \
+            --config config/countries/mrt.json \
+            --prev-state output/state_MRT_previous.json \
+            --admin1-geo cockpit/admin1.json \
+            --admin2-geo cockpit/admin2.json \
+            --out-dir output \
+            --bundle-out cockpit/bundle.json
+          echo "changed=$(cat bundle_changed.flag)" >> "$GITHUB_OUTPUT"
+
+      - name: Render the cockpit HTML
+        if: steps.bundle.outputs.changed == 'true'
+        run: |
+          python3 scripts/render_cockpit.py \
+            --template cockpit/cockpit_template.html \
+            --bundle cockpit/bundle.json \
+            --out cockpit/praps2_cockpit_v2.html
+          # Netlify needs a clean folder with just the page it should serve
+          # at the site root - not the working directory, which also holds
+          # bundle.json/admin1.json etc. that don't need to be public files.
+          mkdir -p deploy
+          cp cockpit/praps2_cockpit_v2.html deploy/index.html
+
+      - name: Generate the CH technical-input packet
+        if: steps.bundle.outputs.changed == 'true'
+        run: |
+          pip install python-docx
+          LATEST_STATE=$(ls -t output/state_MRT_20*.json | head -1)
+          python3 ch_packet/generate_ch_packet.py \
+            --state "$LATEST_STATE" \
+            --prev-state output/state_MRT_previous.json \
+            --out "output/CH_Packet_$(date +%Y%m%d).docx"
+
+      - name: Post alert summary to Slack (no-ops if secret is unset)
+        if: steps.bundle.outputs.changed == 'true'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          LATEST_STATE=$(ls -t output/state_MRT_20*.json | head -1)
+          python3 bot/alert_bot.py \
+            --prev output/state_MRT_previous.json \
+            --curr "$LATEST_STATE" \
+            --slack-webhook "$SLACK_WEBHOOK_URL"
+          # alert_bot.py treats an empty --slack-webhook string as "not provided"
+          # and falls back to dry-run printing, so this step is safe to leave
+          # in even before you've added the SLACK_WEBHOOK_URL secret.
+
+      - name: Commit refreshed data back to the repo
+        if: steps.bundle.outputs.changed == 'true'
+        run: |
+          git config user.name "praps2-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add output/ cockpit/bundle.json cockpit/praps2_cockpit_v2.html
+          git commit -m "Automated dekadal refresh: $(date -u +%Y-%m-%d)" || echo "Nothing to commit"
+          git push
+
+      # --- Deploy option A: Netlify is Git-linked to this repo -----------
+      # If your Netlify site was created via "Import from Git" and points
+      # at this repository/branch, the git push above is ALL you need -
+      # Netlify picks up the change and redeploys automatically. Delete
+      # the "Deploy to Netlify directly" step below in that case.
+
+      # --- Deploy option B: direct deploy (site was drag-and-dropped) ----
+      # Use this if your Netlify site is NOT connected to this repo (e.g.
+      # it was created by dragging a file into Netlify Drop, as the first
+      # version of this cockpit was). Requires two repo secrets:
+      #   NETLIFY_AUTH_TOKEN  - Netlify user settings -> Applications -> New access token
+      #   NETLIFY_SITE_ID     - Netlify site settings -> Site details -> Site ID
+      - name: Deploy to Netlify directly
+        if: steps.bundle.outputs.changed == 'true'
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: deploy
+          production-deploy: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Automated dekadal refresh"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
