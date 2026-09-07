@@ -52,8 +52,12 @@ if __name__ == "__main__":
     parser.add_argument("--config", required=True)
     parser.add_argument("--as-of", default=None, help="Defaults to the latest dekad found in the NDVI CSV")
     parser.add_argument("--prev-state", default=None, help="Previous state JSON, for the alert diff")
-    parser.add_argument("--admin1-geo", required=True)
+        parser.add_argument("--admin1-geo", required=True)
     parser.add_argument("--admin2-geo", required=True)
+    parser.add_argument("--fetch-manifest", default=None,
+                         help="Optional data/fetch_manifest.json from fetch_hdx_data.py - carries HDX's "
+                              "own 'last modified' timestamp per resource, distinct from the latest dekad "
+                              "actually present in the data (the cockpit shows both, since they can differ).")
     parser.add_argument("--out-dir", default="output")
     parser.add_argument("--bundle-out", default="cockpit/bundle.json")
     args = parser.parse_args()
@@ -88,7 +92,17 @@ if __name__ == "__main__":
     with open(args.admin2_geo) as f:
         admin2_geo = json.load(f)
 
-    bundle = {"state": state, "admin1_geo": admin1_geo, "admin2_geo": admin2_geo, "trends": trends, "alerts": alerts}
+    fetch_manifest = None
+    if args.fetch_manifest and Path(args.fetch_manifest).exists():
+        with open(args.fetch_manifest) as f:
+            fetch_manifest = json.load(f)
+        print(f"Fetch manifest loaded: {args.fetch_manifest}")
+    else:
+        print("No fetch manifest found (expected if data/manual/ was used instead of the live HDX fetch) - "
+              "the cockpit's 'HDX resource last touched' badge will be omitted for this run.")
+
+    bundle = {"state": state, "admin1_geo": admin1_geo, "admin2_geo": admin2_geo, "trends": trends,
+              "alerts": alerts, "fetch_manifest": fetch_manifest}
 
     out_path = Path(args.bundle_out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
