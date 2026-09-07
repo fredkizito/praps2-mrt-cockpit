@@ -14,28 +14,7 @@ on:
   workflow_dispatch: {}          # manual "Run workflow" button
 
 permissions:
-  contents: write                     - name: Commit refreshed data back to the repo
-        if: steps.bundle.outputs.changed == 'true'
-        run: |           git config user.name "praps2-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add output/ cockpit/bundle.json cockpit/praps2_cockpit_v2.html
-          git commit -m "Automated dekadal refresh: $(date -u +%Y-%m-%d)" || echo "Nothing to commit"
-          for i in 1 2 3 4 5; do
-            git pull --rebase -X ours origin main
-            if git push; then
-              echo "Push succeeded on attempt $i"
-              break
-            fi
-            echo "Push attempt $i failed, retrying in 5s..."
-            sleep 5
-          done
-          then
-              echo "Push succeeded on attempt $i"
-              break
-            fi
-            echo "Push attempt $i failed, retrying in 5s..."
-            sleep 5
-          done
+  contents: write               # needed to commit the refreshed state/cockpit back to the repo
 
 jobs:
   refresh:
@@ -106,7 +85,6 @@ jobs:
       - name: Generate the CH technical-input packet
         if: steps.bundle.outputs.changed == 'true'
         run: |
-        
           LATEST_STATE=$(ls -t output/state_MRT_20*.json | head -1)
           python3 ch_packet/generate_ch_packet.py \
             --state "$LATEST_STATE" \
@@ -134,8 +112,21 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add output/ cockpit/bundle.json cockpit/praps2_cockpit_v2.html
           git commit -m "Automated dekadal refresh: $(date -u +%Y-%m-%d)" || echo "Nothing to commit"
-          git pull --rebase -X ours origin main
-          git push
+          # Retry pull+push a few times in case main moves between our pull
+          # and our push (e.g. someone editing files on GitHub.com at the
+          # same time this job is running) - a single attempt can lose this
+          # race even with --rebase, if the remote changes again in the
+          # narrow window between the pull and the push.
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X ours origin main
+            if git push; then
+              echo "Push succeeded on attempt $i"
+              break
+            fi
+            echo "Push attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
+
       # --- Deploy option A: Netlify is Git-linked to this repo -----------
       # If your Netlify site was created via "Import from Git" and points
       # at this repository/branch, the git push above is ALL you need -
@@ -148,7 +139,7 @@ jobs:
       # version of this cockpit was). Requires two repo secrets:
       #   NETLIFY_AUTH_TOKEN  - Netlify user settings -> Applications -> New access token
       #   NETLIFY_SITE_ID     - Netlify site settings -> Site details -> Site ID
-            - name: Debug - confirm Netlify secrets actually reach this job
+      - name: Debug - confirm Netlify secrets actually reach this job
         if: steps.bundle.outputs.changed == 'true'
         env:
           NAT: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -164,6 +155,10 @@ jobs:
           else
             echo "NETLIFY_SITE_ID: present, value=$NSI"
           fi
+          # Site ID is an identifier, not a credential - safe to print outright,
+          # and doing so lets us confirm it's an actual site UUID, not the
+          # site's display name pasted in by mistake (a common mix-up).
+
       - name: Deploy to Netlify directly
         if: steps.bundle.outputs.changed == 'true'
         uses: nwtgck/actions-netlify@v3
