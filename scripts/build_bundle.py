@@ -52,7 +52,7 @@ if __name__ == "__main__":
     parser.add_argument("--config", required=True)
     parser.add_argument("--as-of", default=None, help="Defaults to the latest dekad found in the NDVI CSV")
     parser.add_argument("--prev-state", default=None, help="Previous state JSON, for the alert diff")
-        parser.add_argument("--admin1-geo", required=True)
+    parser.add_argument("--admin1-geo", required=True)
     parser.add_argument("--admin2-geo", required=True)
     parser.add_argument("--fetch-manifest", default=None,
                          help="Optional data/fetch_manifest.json from fetch_hdx_data.py - carries HDX's "
