@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRAPS2 Pastoral Early Warning Cockpit v2 — Moughataa Drill-Down</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+      onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css'">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+        onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js';document.head.appendChild(s);"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"
+        onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';document.head.appendChild(s);"></script>
+<style>
+  :root{
+    --bg:#12181B; --panel:#1A2126; --panel-2:#20282D; --border:#333D42; --border-soft:#2A3237;
+    --text:#E9E4D8; --text-muted:#9AA3A8; --text-dim:#6C767B;
+    --severe:#C0463B; --high:#D98B3F; --modhigh:#D9A34A; --moderate:#D9BC55; --favourable:#6B9C5C; --nodata:#4A5257;
+    --accent:#4FA8C9; --accent-dim:#2E4E5A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;}
+  body{padding:28px 32px 60px;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+
+  header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px;flex-wrap:wrap;gap:14px;}
+  header h1{font-size:26px;font-weight:600;}
+  header .sub{color:var(--text-muted);font-size:14px;margin-top:6px;max-width:640px;line-height:1.5;}
+  .dekad-badge{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);border:1px solid var(--accent-dim);background:rgba(79,168,201,0.08);padding:7px 14px;white-space:nowrap;}
+
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:26px;border:1px solid var(--border);}
+  .stat{background:var(--panel);padding:18px 20px;}
+  .stat .num{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;line-height:1;}
+  .stat .lbl{color:var(--text-muted);font-size:12.5px;margin-top:8px;line-height:1.4;}
+  .stat.sev .num{color:var(--severe);} .stat.hi .num{color:var(--high);} .stat.acc .num{color:var(--accent);} .stat.fav .num{color:var(--favourable);}
+
+  .layout{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-bottom:20px;}
+  @media (max-width:980px){.layout{grid-template-columns:1fr;}}
+  .panel{background:var(--panel);border:1px solid var(--border);}
+  .panel-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline;}
+  .panel-head h2{font-size:15px;font-weight:600;}
+  .panel-head .note{font-size:11.5px;color:var(--text-dim);}
+  .panel-body{padding:0;}
+  .panel-body.pad{padding:18px;}
+
+  #map{height:560px;background:var(--panel-2);}
+  .leaflet-container{background:var(--panel-2);font-family:'IBM Plex Sans',sans-serif;}
+  .map-controls{padding:10px 18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .btn{background:var(--panel-2);border:1px solid var(--border);color:var(--text-muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
+  .btn:hover{color:var(--accent);border-color:var(--accent-dim);}
+  .btn.active{color:var(--accent);border-color:var(--accent);}
+  .breadcrumb{font-size:12.5px;color:var(--text-muted);}
+  .breadcrumb b{color:var(--text);}
+
+  #detail-name{font-size:20px;font-weight:600;}
+  #detail-sub{color:var(--text-muted);font-size:13px;margin-top:2px;}
+  .kv-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:13.5px;}
+  .kv-row .k{color:var(--text-muted);}
+  .kv-row .v{font-family:'IBM Plex Mono',monospace;}
+  .tier-pill{display:inline-block;padding:3px 10px;font-size:11.5px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
+  .action-box{margin-top:14px;padding:12px 14px;background:var(--panel-2);border-left:3px solid var(--accent);font-size:13.5px;line-height:1.5;}
+  .data-flag{margin-top:10px;padding:8px 12px;background:rgba(217,169,74,0.1);border-left:3px solid var(--nodata);font-size:12px;color:var(--text-muted);}
+  canvas{max-width:100%;}
+
+  .alert-log{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.85;max-height:320px;overflow-y:auto;}
+  .alert-log .row{display:flex;gap:10px;padding:6px 18px;border-bottom:1px solid var(--border-soft);}
+  .alert-log .badge{padding:1px 7px;font-size:10px;font-weight:600;height:fit-content;white-space:nowrap;}
+  .b-critical{background:var(--severe);color:#FBEFEA;} .b-high{background:var(--high);color:#231705;}
+  .b-medium{background:var(--modhigh);color:#241a05;} .b-info{background:var(--accent-dim);color:var(--accent);}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;font-weight:600;color:var(--text-muted);font-size:11.5px;padding:8px 18px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+  th:hover{color:var(--accent);}
+  td{padding:9px 18px;border-bottom:1px solid var(--border-soft);}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right;}
+  tr:hover td{background:rgba(79,168,201,0.05);cursor:pointer;}
+
+  .engine-note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);padding:12px 18px;border-top:1px solid var(--border);}
+  footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-dim);font-size:11.5px;line-height:1.7;}
+  footer b{color:var(--text-muted);}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Pastoral early warning cockpit — v2</h1>
+    <div class="sub">Mauritania · PRAPS2 · real Leaflet map on official ANSADE boundaries · wilaya-to-moughataa drill-down · fed directly by praps2_engine.py, not hand-entered</div>
+  </div>
+  <div class="dekad-badge" id="dekad-badge">LATEST DEKAD</div>
+</header>
+
+<div class="strip" id="strip"></div>
+
+<div class="layout">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Real geography — click a wilaya, then a moughataa</h2>
+      <span class="breadcrumb" id="breadcrumb"><b>National</b></span>
+    </div>
+    <div class="panel-body">
+      <div id="map"></div>
+      <div class="map-controls">
+        <span style="font-size:11.5px;color:var(--text-dim)">boundaries: ANSADE/HDX COD-AB, official</span>
+        <button class="btn" id="back-btn" style="display:none">&larr; back to national view</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2 id="detail-name">Select a unit</h2></div>
+    <div class="panel-body pad">
+      <div id="detail-sub" style="margin-bottom:10px;"></div>
+      <div id="detail-kv"></div>
+      <div id="no-data-flag"></div>
+      <canvas id="trendChart" height="130" style="margin-top:14px;"></canvas>
+      <div class="action-box" id="action-box"></div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Suitability &amp; vulnerability matrix</h2>
+      <span class="note">wilaya level, real PSVI</span>
+    </div>
+    <div class="panel-body pad">
+      <canvas id="matrixChart" height="230"></canvas>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Alert log — real output of alert_bot.py</h2>
+      <span class="note" id="alert-count"></span>
+    </div>
+    <div class="panel-body">
+      <div class="alert-log" id="alertLog"></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <h2>Priority action table (wilaya level)</h2>
+    <span class="note">click a column to sort · click a row to inspect</span>
+  </div>
+  <div class="panel-body">
+    <table id="priorityTable">
+      <thead>
+        <tr>
+          <th data-key="wilaya">Wilaya</th>
+          <th data-key="real_tier">Tier</th>
+          <th data-key="real_score" class="num">Resource score</th>
+          <th data-key="psvi" class="num">PSVI</th>
+          <th data-key="tlu" class="num">TLU</th>
+        </tr>
+      </thead>
+      <tbody id="priorityBody"></tbody>
+    </table>
+  </div>
+  <div class="engine-note" id="engine-note"></div>
+</div>
+
+<footer>
+  <b>What this is:</b> cockpit v2 — the map is real geography (ANSADE/HDX official boundaries via Leaflet), the risk tiers, PSVI, and alerts are the actual output of <code>praps2_engine.py</code> and <code>alert_bot.py</code> run against the real HDX WFP/MODIS/CHIRPS data, not hand-entered. Click any wilaya to drill into its moughataas — try Trarza to see R'Kiz named and scored directly.<br>
+  <b>Pipeline:</b> praps2_engine.py (ingestion + VCI/PSVI calculation) → alert_bot.py (threshold diffing) → this cockpit (visualization). The same state JSON also feeds the CH-packet generator and field-tool SMS templates.
+</footer>
+
+<script>
+const BUNDLE = __BUNDLE_JSON__;
+
+const TIER_COLOR = {
+  'SEVERE':'#C0463B','HIGH':'#D98B3F','MODERATE-HIGH':'#D9A34A','MODERATE':'#D9BC55',
+  'FAVOURABLE':'#6B9C5C','NO DATA':'#4A5257', undefined:'#4A5257', null:'#4A5257'
+};
+function tierColor(t){ return TIER_COLOR[t] || '#4A5257'; }
+function fmtNum(n){ return (n===null||n===undefined) ? '—' : Number(n).toLocaleString(); }
+
+const admin1ByName = {};
+BUNDLE.state.admin1.forEach(d => admin1ByName[d.wilaya] = d);
+const admin2ByPcode = {};
+BUNDLE.state.admin2.forEach(d => admin2ByPcode[d.PCODE] = d);
+
+document.getElementById('dekad-badge').textContent = 'LATEST DEKAD · ' + BUNDLE.state.as_of;
+document.getElementById('engine-note').textContent =
+  `engine content_hash=${BUNDLE.state.content_hash} · generated_at=${BUNDLE.state.generated_at} · ` +
+  `${BUNDLE.state.n_admin1} admin1 units · ${BUNDLE.state.n_admin2_with_data}/${BUNDLE.state.n_admin2_total} admin2 units with data`;
+
+// ---- status strip ----
+const nSevere = BUNDLE.state.admin1.filter(d=>d.real_tier==='SEVERE').length;
+const nHigh = BUNDLE.state.admin1.filter(d=>d.real_tier==='HIGH').length;
+const nAlerts = BUNDLE.alerts.length;
+const nCritical = BUNDLE.alerts.filter(a=>a.severity==='critical').length;
+document.getElementById('strip').innerHTML = `
+  <div class="stat sev"><div class="num">${nSevere}</div><div class="lbl">wilayas at SEVERE (real 24-yr VCI low)</div></div>
+  <div class="stat hi"><div class="num">${nHigh}</div><div class="lbl">wilayas at HIGH risk</div></div>
+  <div class="stat acc"><div class="num">${nAlerts}</div><div class="lbl">alerts this dekad (${nCritical} critical)</div></div>
+  <div class="stat fav"><div class="num">${BUNDLE.state.n_admin2_with_data}/${BUNDLE.state.n_admin2_total}</div><div class="lbl">moughataas covered by live NDVI/rainfall data</div></div>
+`;
+
+// ---- resilience: wait for a CDN global (a fallback script tag was already
+// ---- attempted via onerror in <head> if the primary CDN failed) before
+// ---- using it; degrade gracefully with a visible message if it never
+// ---- arrives, instead of leaving the section silently blank. ----
+function waitForGlobal(name, timeoutMs, onReady, onTimeout) {
+  const start = Date.now();
+  (function poll() {
+    if (typeof window[name] !== 'undefined') { onReady(); return; }
+    if (Date.now() - start > timeoutMs) { onTimeout(); return; }
+    setTimeout(poll, 150);
+  })();
+}
+function libFailureNotice(label) {
+  return `<div style="padding:24px;color:var(--text-muted);font-size:12.5px;line-height:1.7;text-align:center;">
+    ${label} could not be loaded (likely blocked by a network/firewall filter). The rest of this page —
+    status counts, alerts, and the priority table — does not depend on it and is fully populated.
+  </div>`;
+}
+
+// ---- map ----
+let map = null;
+function styleFeature(tier){
+  return {fillColor: tierColor(tier), weight:1, color:'#12181B', fillOpacity:0.85};
+}
+let admin1Layer, admin2Layer, currentWilaya = null;
+
+function showAdmin1(){
+  if(!map) return;
+  if(admin2Layer){ map.removeLayer(admin2Layer); admin2Layer=null; }
+  if(admin1Layer) map.removeLayer(admin1Layer);
+  admin1Layer = L.geoJSON(BUNDLE.admin1_geo, {
+    style: f => styleFeature(f.properties.real_tier),
+    onEachFeature: (f, layer) => {
+      layer.on('click', () => selectWilayaOnMap(f.properties.wilaya));
+      layer.on('mouseover', () => layer.setStyle({weight:2.5, color:'#4FA8C9'}));
+      layer.on('mouseout', () => layer.setStyle({weight:1, color:'#12181B'}));
+    }
+  }).addTo(map);
+  map.fitBounds(admin1Layer.getBounds(), {padding:[10,10]});
+  document.getElementById('back-btn').style.display = 'none';
+  document.getElementById('breadcrumb').innerHTML = '<b>National</b>';
+  currentWilaya = null;
+}
+
+function showAdmin2(wilayaName){
+  if(!map) return;
+  if(admin1Layer){ map.removeLayer(admin1Layer); admin1Layer=null; }
+  if(admin2Layer) map.removeLayer(admin2Layer);
+  const feats = BUNDLE.admin2_geo.features.filter(f => f.properties.wilaya === wilayaName);
+  admin2Layer = L.geoJSON({type:'FeatureCollection', features:feats}, {
+    style: f => styleFeature(f.properties.real_tier),
+    onEachFeature: (f, layer) => {
+      layer.on('click', () => selectMoughataaOnMap(f.properties.adm2_pcode));
+      layer.on('mouseover', () => layer.setStyle({weight:2.5, color:'#4FA8C9'}));
+      layer.on('mouseout', () => layer.setStyle({weight:1, color:'#12181B'}));
+    }
+  }).addTo(map);
+  if(feats.length) map.fitBounds(admin2Layer.getBounds(), {padding:[20,20]});
+  document.getElementById('back-btn').style.display = 'inline-block';
+  document.getElementById('breadcrumb').innerHTML = `National &rarr; <b>${wilayaName}</b>`;
+  currentWilaya = wilayaName;
+}
+
+document.getElementById('back-btn').addEventListener('click', showAdmin1);
+
+function selectWilayaOnMap(name){
+  showAdmin2(name);
+  selectWilaya(name);
+}
+function selectMoughataaOnMap(pcode){
+  selectMoughataa(pcode);
+}
+
+waitForGlobal('L', 6000, () => {
+  map = L.map('map', {zoomControl:true, attributionControl:false}).setView([20.5, -10.5], 5.4);
+  showAdmin1();
+}, () => {
+  document.getElementById('map').innerHTML = libFailureNotice('Map library (Leaflet)');
+});
+
+// ---- detail panel: wilaya ----
+let trendChart = null;
+function recommend(tier, psviTier){
+  if(tier==='SEVERE') return 'Fast-track emergency feed/water support — at or near 24-yr historical low.';
+  if(tier==='HIGH') return 'Extend monitoring and pre-position feed supplementation.';
+  if(psviTier==='VERY HIGH') return 'Resource status is only moderate but livestock density is exceptional — prioritise reserve-drawdown monitoring.';
+  if(tier==='FAVOURABLE') return 'Best real score nationally or regionally as of the latest dekad.';
+  return 'Regional-average conditions — maintain standard dekadal monitoring.';
+}
+
+function renderTrend(pcodeOrName, label){
+  if(typeof Chart === 'undefined'){
+    const canvas = document.getElementById('trendChart');
+    canvas.style.display = 'none';
+    let note = document.getElementById('trendChart-fallback');
+    if(!note){
+      note = document.createElement('div');
+      note.id = 'trendChart-fallback';
+      canvas.parentNode.insertBefore(note, canvas);
+    }
+    note.innerHTML = libFailureNotice('Chart library (Chart.js)');
+    return;
+  }
+  const trend = BUNDLE.trends[pcodeOrName];
+  const ctx = document.getElementById('trendChart').getContext('2d');
+  if(trendChart) trendChart.destroy();
+  if(!trend){ return; }
+  trendChart = new Chart(ctx, {
+    type:'line',
+    data:{ labels: trend.map(p=>p.d),
+      datasets:[
+        {label:'VCI', data:trend.map(p=>p.vci), borderColor:'#4FA8C9', tension:0.25, pointRadius:2.5},
+        {label:'Severe threshold', data:trend.map(()=>35), borderColor:'#6C767B', borderDash:[4,4], pointRadius:0, borderWidth:1}
+      ]},
+    options:{ plugins:{legend:{labels:{color:'#9AA3A8', font:{family:'IBM Plex Mono', size:10}}}},
+      scales:{ x:{ticks:{color:'#6C767B', font:{size:9}}, grid:{color:'#2A3237'}},
+               y:{min:0, max:100, ticks:{color:'#6C767B', font:{size:10}}, grid:{color:'#2A3237'}} } }
+  });
+}
+
+function selectWilaya(name){
+  const d = admin1ByName[name];
+  if(!d) return;
+  document.getElementById('detail-name').textContent = d.wilaya;
+  document.getElementById('detail-sub').innerHTML = `Wilaya · ${fmtNum(Math.round(d.area_km2))} km² · <span class="tier-pill" style="background:${tierColor(d.real_tier)};color:${(d.real_tier==='MODERATE'||d.real_tier==='MODERATE-HIGH')?'#241a05':'#fff'}">${d.real_tier}</span>`;
+  document.getElementById('detail-kv').innerHTML = `
+    <div class="kv-row"><span class="k">Real resource score</span><span class="v">${d.real_score?.toFixed(2) ?? '—'}</span></div>
+    <div class="kv-row"><span class="k">Season-avg VCI</span><span class="v">${d.vci_season_avg?.toFixed(1) ?? '—'}</span></div>
+    <div class="kv-row"><span class="k">3-month rainfall, % normal</span><span class="v">${d.rain3mo?.toFixed(1) ?? '—'}%</span></div>
+    <div class="kv-row"><span class="k">Livestock density</span><span class="v">${d.tlu_km2?.toFixed(2) ?? '—'} TLU/km²</span></div>
+    <div class="kv-row"><span class="k">PSVI</span><span class="v">${d.psvi ?? '—'} (${d.psvi_tier ?? 'n/a'})</span></div>
+  `;
+  document.getElementById('no-data-flag').innerHTML = '';
+  document.getElementById('action-box').textContent = recommend(d.real_tier, d.psvi_tier);
+  renderTrend(d.PCODE, d.wilaya);
+  document.querySelectorAll('#priorityTable tr').forEach(tr => tr.style.background = tr.dataset.wilaya===name ? 'rgba(79,168,201,0.08)' : '');
+}
+
+function selectMoughataa(pcode){
+  const d = admin2ByPcode[pcode];
+  if(!d) return;
+  const hasData = d.real_tier && d.real_tier !== 'NO DATA';
+  document.getElementById('detail-name').textContent = pcode;
+  document.getElementById('detail-sub').innerHTML = `Moughataa (admin-2) · ${d.wilaya || ''} · <span class="tier-pill" style="background:${tierColor(d.real_tier)};color:${(d.real_tier==='MODERATE'||d.real_tier==='MODERATE-HIGH')?'#241a05':'#fff'}">${d.real_tier || 'NO DATA'}</span>`;
+  if(hasData){
+    document.getElementById('detail-kv').innerHTML = `
+      <div class="kv-row"><span class="k">Real resource score</span><span class="v">${d.real_score?.toFixed(2) ?? '—'}</span></div>
+      <div class="kv-row"><span class="k">Season-avg VCI</span><span class="v">${d.vci_season_avg?.toFixed(1) ?? '—'}</span></div>
+      <div class="kv-row"><span class="k">3-month rainfall, % normal</span><span class="v">${d.rain3mo?.toFixed(1) ?? '—'}%</span></div>
+    `;
+    document.getElementById('no-data-flag').innerHTML = '';
+    document.getElementById('action-box').textContent = recommend(d.real_tier, null);
+    renderTrend(pcode, pcode);
+  } else {
+    document.getElementById('detail-kv').innerHTML = '';
+    document.getElementById('no-data-flag').innerHTML = '<div class="data-flag">Not covered by the current WFP NDVI/rainfall admin-2 series — a data-vintage gap, not a boundary gap. Parent wilaya tier is the best available fallback.</div>';
+    document.getElementById('action-box').textContent = 'No live signal for this moughataa yet — fall back to the parent wilaya tier shown on the national map.';
+    if(trendChart){ trendChart.destroy(); trendChart=null; }
+  }
+}
+
+// ---- suitability matrix ----
+const matrixData = BUNDLE.state.admin1.filter(d => d.wilaya !== 'Nouakchott' && d.psvi !== null);
+waitForGlobal('Chart', 6000, () => {
+  new Chart(document.getElementById('matrixChart').getContext('2d'), {
+    type:'scatter',
+    data:{ datasets:[{
+      label:'Wilaya',
+      data: matrixData.map(d=>({x:d.real_score, y:d.tlu_km2, label:d.wilaya})),
+      backgroundColor: matrixData.map(d=>tierColor(d.real_tier)),
+      pointRadius: matrixData.map(d=>Math.max(5, Math.sqrt(d.tlu)/220)),
+    }]},
+    options:{
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label:(ctx)=> `${ctx.raw.label}: score ${ctx.raw.x.toFixed(2)}, ${ctx.raw.y.toFixed(1)} TLU/km²`}} },
+      scales:{
+        x:{title:{display:true,text:'Real resource score', color:'#9AA3A8'}, min:0.5, max:5, ticks:{color:'#6C767B'}, grid:{color:'#2A3237'}},
+        y:{type:'logarithmic', title:{display:true,text:'TLU / km²', color:'#9AA3A8'}, ticks:{color:'#6C767B'}, grid:{color:'#2A3237'}}
+      }
+    }
+  });
+}, () => {
+  document.getElementById('matrixChart').outerHTML = libFailureNotice('Chart library (Chart.js)');
+});
+
+// ---- alert log ----
+document.getElementById('alert-count').textContent = `${BUNDLE.alerts.length} alerts, 21 Jul -> 21 Aug 2026`;
+const log = document.getElementById('alertLog');
+const sevRank = {critical:0, high:1, medium:2, info:3};
+[...BUNDLE.alerts].sort((a,b)=>sevRank[a.severity]-sevRank[b.severity]).forEach(a=>{
+  const row = document.createElement('div');
+  row.className='row';
+  const cls = 'b-'+a.severity;
+  row.innerHTML = `<span class="badge ${cls}">${a.severity.toUpperCase()}</span><span>${a.message}</span>`;
+  log.appendChild(row);
+});
+
+// ---- priority table ----
+const tbody = document.getElementById('priorityBody');
+let sortKey='real_score', sortAsc=true;
+function renderTable(){
+  const rows = [...BUNDLE.state.admin1].filter(d=>d.wilaya!=='Nouakchott').sort((a,b)=>{
+    let av=a[sortKey], bv=b[sortKey];
+    if(typeof av==='string'){ return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av); }
+    av = av===null||av===undefined ? -Infinity : av; bv = bv===null||bv===undefined ? -Infinity : bv;
+    return sortAsc ? av-bv : bv-av;
+  });
+  tbody.innerHTML = rows.map(d=>`
+    <tr data-wilaya="${d.wilaya}">
+      <td>${d.wilaya}</td>
+      <td><span class="tier-pill" style="background:${tierColor(d.real_tier)};color:${(d.real_tier==='MODERATE'||d.real_tier==='MODERATE-HIGH')?'#241a05':'#fff'}">${d.real_tier}</span></td>
+      <td class="num">${d.real_score?.toFixed(2) ?? '—'}</td>
+      <td class="num">${d.psvi ?? '—'}</td>
+      <td class="num">${fmtNum(Math.round(d.tlu))}</td>
+    </tr>`).join('');
+  tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', ()=>{ showAdmin2(tr.dataset.wilaya); selectWilaya(tr.dataset.wilaya); }));
+}
+document.querySelectorAll('#priorityTable th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(sortKey===key) sortAsc=!sortAsc; else { sortKey=key; sortAsc=true; }
+    renderTable();
+  });
+});
+renderTable();
+
+// showAdmin1() is now called automatically once Leaflet is confirmed loaded (see waitForGlobal('L', ...) above)
+selectWilaya('Adrar');
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+[
+  {
+    "wilaya": "Adrar",
+    "tier": "SEVERE",
+    "sms": "PRAPS2 Adrar: risque GRAVE (indice 1.5) au 2026-08-21. Deplacez les troupeaux si possible. Aide alimentaire disponible - contactez l'agent local."
+  },
+  {
+    "wilaya": "Trarza",
+    "tier": "FAVOURABLE",
+    "sms": "PRAPS2 Trarza: risque BON (indice 4.2) au 2026-08-21. Bonnes conditions. Zone favorable pour transhumance."
+  },
+  {
+    "wilaya": "Tagant",
+    "tier": "HIGH",
+    "sms": "PRAPS2 Tagant: risque ELEVE (indice 2.2) au 2026-08-21. Surveillez l'etat du betail. Reserves de secours recommandees."
+  }
+]

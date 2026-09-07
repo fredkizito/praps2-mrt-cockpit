@@ -1,0 +1,169 @@
+{
+  "country_name": "Mauritania",
+  "country_iso": "MRT",
+  "ndvi_csv": "/mnt/user-data/uploads/mrt-ndvi-subnat-full.csv",
+  "rainfall_csv": "/mnt/user-data/uploads/mrt-rainfall-subnat-full.csv",
+  "season_start": "2026-06-01",
+  "pcode_to_name_adm1": {
+    "MR01": "Hodh Chargui",
+    "MR02": "Hodh El Gharbi",
+    "MR03": "Assaba",
+    "MR04": "Gorgol",
+    "MR05": "Brakna",
+    "MR06": "Trarza",
+    "MR07": "Adrar",
+    "MR08": "Dakhlet Nouadhibou",
+    "MR09": "Tagant",
+    "MR10": "Guidimakha",
+    "MR11": "Tiris Zemmour",
+    "MR12": "Inchiri",
+    "MR15": "Nouakchott"
+  },
+  "pcode_prefix_to_wilaya": {
+    "MR01": "Hodh Chargui",
+    "MR02": "Hodh El Gharbi",
+    "MR03": "Assaba",
+    "MR04": "Gorgol",
+    "MR05": "Brakna",
+    "MR06": "Trarza",
+    "MR07": "Adrar",
+    "MR08": "Dakhlet Nouadhibou",
+    "MR09": "Tagant",
+    "MR10": "Guidimakha",
+    "MR11": "Tiris Zemmour",
+    "MR12": "Inchiri",
+    "MR13": "Nouakchott",
+    "MR14": "Nouakchott",
+    "MR15": "Nouakchott"
+  },
+  "area_km2_by_wilaya": {
+    "Hodh Chargui": 182700,
+    "Hodh El Gharbi": 53400,
+    "Assaba": 36600,
+    "Gorgol": 13600,
+    "Brakna": 33800,
+    "Trarza": 67800,
+    "Adrar": 235000,
+    "Dakhlet Nouadhibou": 23090,
+    "Tagant": 98340,
+    "Guidimakha": 10300,
+    "Tiris Zemmour": 252900,
+    "Inchiri": 46800,
+    "Nouakchott": 704
+  },
+  "livestock_by_wilaya": {
+    "Hodh Chargui": {
+      "cattle": 1983058,
+      "camels": 663130,
+      "sheep": 5414509,
+      "goats": 1609150,
+      "horses": 31411,
+      "donkeys": 130893
+    },
+    "Hodh El Gharbi": {
+      "cattle": 1088528,
+      "camels": 167756,
+      "sheep": 1855183,
+      "goats": 753489,
+      "horses": 13675,
+      "donkeys": 66827
+    },
+    "Assaba": {
+      "cattle": 656600,
+      "camels": 153818,
+      "sheep": 1478895,
+      "goats": 851065,
+      "horses": 7503,
+      "donkeys": 85570
+    },
+    "Gorgol": {
+      "cattle": 494873,
+      "camels": 33438,
+      "sheep": 964604,
+      "goats": 724345,
+      "horses": 23885,
+      "donkeys": 70358
+    },
+    "Brakna": {
+      "cattle": 390990,
+      "camels": 127763,
+      "sheep": 1445383,
+      "goats": 1116228,
+      "horses": 21947,
+      "donkeys": 77261
+    },
+    "Trarza": {
+      "cattle": 562564,
+      "camels": 267277,
+      "sheep": 1517335,
+      "goats": 1036780,
+      "horses": 7556,
+      "donkeys": 40105
+    },
+    "Adrar": {
+      "cattle": 97,
+      "camels": 92700,
+      "sheep": 41915,
+      "goats": 126644,
+      "horses": 4,
+      "donkeys": 6871
+    },
+    "Dakhlet Nouadhibou": {
+      "cattle": 426,
+      "camels": 122724,
+      "sheep": 24434,
+      "goats": 49671,
+      "horses": 19,
+      "donkeys": 1114
+    },
+    "Tagant": {
+      "cattle": 53963,
+      "camels": 182610,
+      "sheep": 343723,
+      "goats": 392072,
+      "horses": 794,
+      "donkeys": 20925
+    },
+    "Guidimakha": {
+      "cattle": 911227,
+      "camels": 15166,
+      "sheep": 721713,
+      "goats": 426219,
+      "horses": 6734,
+      "donkeys": 57060
+    },
+    "Tiris Zemmour": {
+      "cattle": 117,
+      "camels": 124024,
+      "sheep": 35055,
+      "goats": 79248,
+      "horses": 0,
+      "donkeys": 1080
+    },
+    "Inchiri": {
+      "cattle": 99,
+      "camels": 44305,
+      "sheep": 11636,
+      "goats": 45451,
+      "horses": 9,
+      "donkeys": 3471
+    },
+    "Nouakchott": {
+      "cattle": 4826,
+      "camels": 6566,
+      "sheep": 61074,
+      "goats": 65447,
+      "horses": 190,
+      "donkeys": 1461
+    }
+  },
+  "tlu_weights": {
+    "cattle": 0.7,
+    "camels": 1.0,
+    "small_ruminant": 0.12,
+    "equine": 0.5
+  },
+  "moughataa_gazetteer": "/home/claude/work/cod_ab/geojson/mrt_admin2.geojson",
+  "wilaya_boundaries": "/home/claude/work/shapefile_final/mauritania_admin1_real.geojson",
+  "moughataa_boundaries": "/home/claude/work/shapefile_final/mauritania_admin2_moughataa_real.geojson"
+}

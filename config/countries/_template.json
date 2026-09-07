@@ -1,0 +1,25 @@
+{
+  "_comment": "Template for onboarding a new PRAPS2 country. Copy this file, rename to the ISO3 code (e.g. mli.json for Mali), and fill in every field marked TODO. No code changes are needed in praps2_engine.py - it reads whichever config it's pointed at.",
+  "country_name": "TODO - e.g. Mali",
+  "country_iso": "TODO - e.g. MLI",
+  "ndvi_csv": "TODO - path or URL to the HDX 'NDVI at Subnational Level' CSV for this country (dataset slug pattern: <iso3-lower>-ndvi-subnational)",
+  "rainfall_csv": "TODO - path or URL to the HDX 'Rainfall Indicators at Subnational Level' CSV (dataset slug pattern: <iso3-lower>-rainfall-subnational)",
+  "season_start": "TODO - e.g. 2026-06-01, the start of this country's rainy season",
+  "pcode_to_name_adm1": {
+    "_comment": "Map each admin1 P-code used in the NDVI/rainfall CSVs to a readable region name. Get this from the country's HDX cod-ab-<iso3> gazetteer.",
+    "TODO_PCODE_1": "TODO region name"
+  },
+  "pcode_prefix_to_wilaya": {
+    "_comment": "Same mapping, used to assign admin2 (moughataa/cercle/departement - naming varies by country) units to their parent admin1 region."
+  },
+  "area_km2_by_wilaya": {
+    "_comment": "From the country's national statistics agency or the ANSADE-equivalent COD-AB admin1 layer (area_sqkm field)."
+  },
+  "livestock_by_wilaya": {
+    "_comment": "From the country's most recent livestock census (Mauritania used RGE 2024). If no recent census exists, this component of PSVI cannot be computed until one is available - flag this rather than estimating."
+  },
+  "tlu_weights": {
+    "cattle": 0.7, "camels": 1.0, "small_ruminant": 0.12, "equine": 0.5,
+    "_comment": "Standard Tropical Livestock Unit conversion factors - these are usually the same across Sahel countries, but confirm against the national census methodology."
+  }
+}

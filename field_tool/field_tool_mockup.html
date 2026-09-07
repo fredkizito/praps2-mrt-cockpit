@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRAPS2 Field Tool — SMS/USSD Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body{background:#12181B;color:#E9E4D8;font-family:'IBM Plex Sans',sans-serif;padding:40px;display:flex;gap:50px;flex-wrap:wrap;justify-content:center;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:22px;text-align:center;width:100%;margin-bottom:6px;}
+  .sub{text-align:center;width:100%;color:#9AA3A8;font-size:13px;margin-bottom:30px;max-width:600px;margin-left:auto;margin-right:auto;}
+  .phone{width:300px;background:#1A2126;border:3px solid #333D42;border-radius:28px;padding:16px 12px;box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+  .phone-top{text-align:center;font-size:11px;color:#6C767B;margin-bottom:12px;font-family:'IBM Plex Mono',monospace;}
+  .thread-title{font-size:13px;font-weight:600;color:#E9E4D8;text-align:center;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #333D42;}
+  .bubble{background:#20282D;border-radius:14px;padding:10px 13px;margin-bottom:10px;font-size:12.5px;line-height:1.5;max-width:92%;}
+  .bubble.severe{border-left:3px solid #C0463B;}
+  .bubble.high{border-left:3px solid #D98B3F;}
+  .bubble.favourable{border-left:3px solid #6B9C5C;}
+  .bubble .meta{font-size:10px;color:#6C767B;margin-top:6px;font-family:'IBM Plex Mono',monospace;}
+  .ussd-box{width:300px;background:#000;border:3px solid #333D42;border-radius:10px;padding:18px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#7CE68A;line-height:1.8;height:fit-content;}
+  .ussd-title{color:#6C767B;font-size:10.5px;margin-bottom:10px;}
+  .col-label{width:300px;text-align:center;font-size:12px;color:#9AA3A8;margin-bottom:10px;font-weight:600;}
+  .col{display:flex;flex-direction:column;align-items:center;}
+</style>
+</head>
+<body>
+<h1>PRAPS2 field tool — SMS &amp; USSD, zero smartphone required</h1>
+<div class="sub">Every message below is the real, unedited output of sms_generator.py run against the actual 21 Aug 2026 engine state — not placeholder copy. GSM 7-bit safe (accents stripped), each under the 160-character SMS limit.</div>
+
+<div class="col">
+  <div class="col-label">Inbound alert SMS (one-way, push)</div>
+  <div class="phone">
+    <div class="phone-top">Messages &middot; PRAPS2</div>
+    <div class="thread-title">PRAPS2</div>
+    <div class="bubble severe">PRAPS2 Adrar: risque GRAVE (indice 1.5) au 2026-08-21. Deplacez les troupeaux si possible. Aide alimentaire disponible - contactez l'agent local.
+      <div class="meta">145 chars &middot; tier=SEVERE</div>
+    </div>
+    <div class="bubble high">PRAPS2 Tagant: risque ELEVE (indice 2.2) au 2026-08-21. Surveillez l'etat du betail. Reserves de secours recommandees.
+      <div class="meta">118 chars &middot; tier=HIGH</div>
+    </div>
+    <div class="bubble favourable">PRAPS2 Trarza: risque BON (indice 4.2) au 2026-08-21. Bonnes conditions. Zone favorable pour transhumance.
+      <div class="meta">106 chars &middot; tier=FAVOURABLE</div>
+    </div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="col-label">USSD session (interactive, pull — dial *789#)</div>
+  <div class="ussd-box">
+    <div class="ussd-title">*789# — session active</div>
+    CON Bienvenue PRAPS2. Choisissez<br>votre wilaya:<br><br>
+    1. Adrar<br>2. Assaba<br>3. Brakna<br>4. Dakhlet Nouadhibou<br>5. Gorgol<br>6. Guidimakha<br>7. Hodh Chargui<br>8. Hodh El Gharbi<br>9. Inchiri<br>10. Nouakchott<br>11. Tagant<br>12. Tiris Zemmour<br>13. Trarza<br><br>
+    &gt; <span style="color:#E9E4D8">1</span><br><br>
+    END Adrar: risque GRAVE.<br>Deplacez les troupeaux si<br>possible. Aide alimentaire<br>disponible - contactez<br>l'agent local.
+  </div>
+</div>
+</body>
+</html>
