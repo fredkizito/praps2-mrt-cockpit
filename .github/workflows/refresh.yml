@@ -14,7 +14,22 @@ on:
   workflow_dispatch: {}          # manual "Run workflow" button
 
 permissions:
-  contents: write               # needed to commit the refreshed state/cockpit back to the repo
+  contents: write                     - name: Commit refreshed data back to the repo
+        if: steps.bundle.outputs.changed == 'true'
+        run: |
+          git config user.name "praps2-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add output/ cockpit/bundle.json cockpit/praps2_cockpit_v2.html
+          git commit -m "Automated dekadal refresh: $(date -u +%Y-%m-%d)" || echo "Nothing to commit"
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X ours origin main
+            if git push; then
+              echo "Push succeeded on attempt $i"
+              break
+            fi
+            echo "Push attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
 
 jobs:
   refresh:
