@@ -127,6 +127,22 @@ jobs:
       # version of this cockpit was). Requires two repo secrets:
       #   NETLIFY_AUTH_TOKEN  - Netlify user settings -> Applications -> New access token
       #   NETLIFY_SITE_ID     - Netlify site settings -> Site details -> Site ID
+            - name: Debug - confirm Netlify secrets actually reach this job
+        if: steps.bundle.outputs.changed == 'true'
+        env:
+          NAT: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NSI: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          if [ -z "$NAT" ]; then
+            echo "NETLIFY_AUTH_TOKEN: EMPTY - not reaching this job at all"
+          else
+            echo "NETLIFY_AUTH_TOKEN: present, length=${#NAT} characters"
+          fi
+          if [ -z "$NSI" ]; then
+            echo "NETLIFY_SITE_ID: EMPTY - not reaching this job at all"
+          else
+            echo "NETLIFY_SITE_ID: present, value=$NSI"
+          fi
       - name: Deploy to Netlify directly
         if: steps.bundle.outputs.changed == 'true'
         uses: nwtgck/actions-netlify@v3
