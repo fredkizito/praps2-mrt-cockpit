@@ -32,7 +32,7 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run: pip install pandas numpy requests
+        run: pip install -r requirements.txt
 
       - name: Use manual CSVs if present, otherwise fetch from HDX
         run: |
@@ -84,7 +84,7 @@ jobs:
       - name: Generate the CH technical-input packet
         if: steps.bundle.outputs.changed == 'true'
         run: |
-          pip install python-docx
+        
           LATEST_STATE=$(ls -t output/state_MRT_20*.json | head -1)
           python3 ch_packet/generate_ch_packet.py \
             --state "$LATEST_STATE" \
