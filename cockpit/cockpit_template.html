@@ -90,7 +90,10 @@
     <h1>Pastoral early warning cockpit — v2</h1>
     <div class="sub">Mauritania · PRAPS2 · real Leaflet map on official ANSADE boundaries · wilaya-to-moughataa drill-down · fed directly by praps2_engine.py, not hand-entered</div>
   </div>
-  <div class="dekad-badge" id="dekad-badge">LATEST DEKAD</div>
+   <div class="badge-stack">
+    <div class="dekad-badge" id="dekad-badge" title="The most recent dekad for which real NDVI/rainfall data actually exists">LATEST DEKAD WITH DATA</div>
+    <div class="dekad-badge secondary" id="resource-touched-badge" style="display:none;" title="When HDX last modified the source file - can differ from the badge above if the file was re-validated or corrected without new dekad rows being added yet"></div>
+  </div>
 </header>
 
 <div class="strip" id="strip"></div>
@@ -186,7 +189,24 @@ BUNDLE.state.admin1.forEach(d => admin1ByName[d.wilaya] = d);
 const admin2ByPcode = {};
 BUNDLE.state.admin2.forEach(d => admin2ByPcode[d.PCODE] = d);
 
-document.getElementById('dekad-badge').textContent = 'LATEST DEKAD · ' + BUNDLE.state.as_of;
+document.getElementById('dekad-badge').textContent = 'LATEST DEKAD WITH DATA · ' + BUNDLE.state.as_of;
+
+if (BUNDLE.fetch_manifest) {
+  const fm = BUNDLE.fetch_manifest;
+  const ndviLM = fm.ndvi && fm.ndvi.last_modified ? fm.ndvi.last_modified.slice(0, 10) : null;
+  const rainLM = fm.rainfall && fm.rainfall.last_modified ? fm.rainfall.last_modified.slice(0, 10) : null;
+  let label = null;
+  if (ndviLM && rainLM && ndviLM === rainLM) {
+    label = `HDX RESOURCE LAST TOUCHED · ${ndviLM}`;
+  } else if (ndviLM || rainLM) {
+    label = `HDX TOUCHED · NDVI ${ndviLM || 'n/a'} · RAINFALL ${rainLM || 'n/a'}`;
+  }
+  if (label) {
+    const el = document.getElementById('resource-touched-badge');
+    el.textContent = label;
+    el.style.display = 'inline-block';
+  }
+}
 document.getElementById('engine-note').textContent =
   `engine content_hash=${BUNDLE.state.content_hash} · generated_at=${BUNDLE.state.generated_at} · ` +
   `${BUNDLE.state.n_admin1} admin1 units · ${BUNDLE.state.n_admin2_with_data}/${BUNDLE.state.n_admin2_total} admin2 units with data`;
