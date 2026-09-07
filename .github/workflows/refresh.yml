@@ -113,8 +113,8 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add output/ cockpit/bundle.json cockpit/praps2_cockpit_v2.html
           git commit -m "Automated dekadal refresh: $(date -u +%Y-%m-%d)" || echo "Nothing to commit"
+          git pull --rebase -X ours origin main
           git push
-
       # --- Deploy option A: Netlify is Git-linked to this repo -----------
       # If your Netlify site was created via "Import from Git" and points
       # at this repository/branch, the git push above is ALL you need -
