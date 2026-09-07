@@ -93,6 +93,12 @@ if __name__ == "__main__":
         dest = out_dir / f"{key}.csv"
         download(url, dest)
         print(f"  -> saved to {dest} ({dest.stat().st_size:,} bytes)")
+        try:
+            import pandas as pd
+            latest_row_date = pd.read_csv(dest, usecols=["date"], parse_dates=["date"])["date"].max()
+            print(f"  -> latest dekad actually present in the data: {latest_row_date.date()}")
+        except Exception as e:
+            print(f"  -> (could not determine latest row date: {e})")
         manifest[key] = {"source_name": name, "source_url": url, "last_modified": last_modified, "path": str(dest)}
 
     with open(out_dir / "fetch_manifest.json", "w") as f:
