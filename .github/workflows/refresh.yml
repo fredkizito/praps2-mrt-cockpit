@@ -135,7 +135,13 @@ jobs:
           if [ -z "$NSI" ]; then
             echo "NETLIFY_SITE_ID: EMPTY - not reaching this job at all"
           else
-            echo "NETLIFY_SITE_ID: present, value=$NSI"
+            echo "NETLIFY_SITE_ID: present, length=${#NSI} characters (GitHub hides the actual value since it's a registered secret)"
+            if [[ "$NSI" =~ ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ ]]; then
+              echo "NETLIFY_SITE_ID: matches the standard 36-character UUID format - looks correct"
+            else
+              echo "NETLIFY_SITE_ID: does NOT match the standard UUID format (expected 36 characters like a1b2c3d4-5678-90ab-cdef-1234567890ab)"
+              echo "This is very likely the bug - did you paste the site NAME (e.g. miavcdpraps) instead of the actual Site ID?"
+            fi
           fi
 
       - name: Deploy to Netlify directly
