@@ -81,6 +81,8 @@
   .engine-note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);padding:12px 18px;border-top:1px solid var(--border);}
   footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-dim);font-size:11.5px;line-height:1.7;}
   footer b{color:var(--text-muted);}
+  footer a{color:var(--accent);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -171,7 +173,8 @@
 
 <footer>
   <b>What this is:</b> cockpit v2 — the map is real geography (ANSADE/HDX official boundaries via Leaflet), the risk tiers, PSVI, and alerts are the actual output of <code>praps2_engine.py</code> and <code>alert_bot.py</code> run against the real HDX WFP/MODIS/CHIRPS data, not hand-entered. Click any wilaya to drill into its moughataas — try Trarza to see R'Kiz named and scored directly.<br>
-  <b>Pipeline:</b> praps2_engine.py (ingestion + VCI/PSVI calculation) → alert_bot.py (threshold diffing) → this cockpit (visualization). The same state JSON also feeds the CH-packet generator and field-tool SMS templates.
+    <b>Pipeline:</b> praps2_engine.py (ingestion + VCI/PSVI calculation) → alert_bot.py (threshold diffing) → this cockpit (visualization). The same state JSON also feeds the CH-packet generator and field-tool SMS templates.<br>
+  <b>Data sources:</b> <a href="https://data.humdata.org/dataset/mrt-ndvi-subnational" target="_blank" rel="noopener">NDVI (WFP/MODIS via HDX)</a> · <a href="https://data.humdata.org/dataset/mrt-rainfall-subnational" target="_blank" rel="noopener">Rainfall (CHIRPS via HDX)</a> · <a href="https://data.humdata.org/dataset/cod-ab-mrt" target="_blank" rel="noopener">Administrative boundaries (ANSADE via HDX)</a> · <a href="https://github.com/fredkizito/praps2-mrt-cockpit" target="_blank" rel="noopener">Source code &amp; methodology (GitHub)</a>
 </footer>
 
 <script>
