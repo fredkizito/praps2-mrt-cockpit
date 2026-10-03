@@ -1,0 +1,543 @@
+{
+  "country": "Mauritania",
+  "country_iso": "MRT",
+  "as_of": "2026-09-11",
+  "generated_at": "2026-10-03T06:10:07.515726+00:00",
+  "admin1": [
+    {
+      "PCODE": "MR01",
+      "vci_season_avg": 65.8153801737,
+      "rain3mo": 86.501,
+      "wilaya": "Hodh Chargui",
+      "real_score": 4.15,
+      "real_tier": "FAVOURABLE",
+      "tlu": 2975261.6799999997,
+      "tlu_km2": 16.2849571976,
+      "area_km2": 182700,
+      "psvi": 3.92,
+      "psvi_tier": "MODERATE"
+    },
+    {
+      "PCODE": "MR02",
+      "vci_season_avg": 66.0403215806,
+      "rain3mo": 74.58575,
+      "wilaya": "Hodh El Gharbi",
+      "real_score": 3.62,
+      "real_tier": "MODERATE",
+      "tlu": 1283017.24,
+      "tlu_km2": 24.0265400749,
+      "area_km2": 53400,
+      "psvi": 6.64,
+      "psvi_tier": "HIGH"
+    },
+    {
+      "PCODE": "MR03",
+      "vci_season_avg": 58.9154159002,
+      "rain3mo": 70.55305,
+      "wilaya": "Assaba",
+      "real_score": 2.97,
+      "real_tier": "MODERATE-HIGH",
+      "tlu": 939569.7,
+      "tlu_km2": 25.6713032787,
+      "area_km2": 36600,
+      "psvi": 8.64,
+      "psvi_tier": "VERY HIGH"
+    },
+    {
+      "PCODE": "MR04",
+      "vci_season_avg": 49.1271467646,
+      "rain3mo": 77.8706,
+      "wilaya": "Gorgol",
+      "real_score": 2.5,
+      "real_tier": "HIGH",
+      "tlu": 629644.48,
+      "tlu_km2": 46.2973882353,
+      "area_km2": 13600,
+      "psvi": 18.52,
+      "psvi_tier": "VERY HIGH"
+    },
+    {
+      "PCODE": "MR05",
+      "vci_season_avg": 50.0972791807,
+      "rain3mo": 76.83331,
+      "wilaya": "Brakna",
+      "real_score": 3.15,
+      "real_tier": "MODERATE-HIGH",
+      "tlu": 758453.3200000001,
+      "tlu_km2": 22.4394473373,
+      "area_km2": 33800,
+      "psvi": 7.12,
+      "psvi_tier": "HIGH"
+    },
+    {
+      "PCODE": "MR06",
+      "vci_season_avg": 70.8976617602,
+      "rain3mo": 72.424576,
+      "wilaya": "Trarza",
+      "real_score": 3.62,
+      "real_tier": "MODERATE",
+      "tlu": 991396.1000000001,
+      "tlu_km2": 14.6223613569,
+      "area_km2": 67800,
+      "psvi": 4.04,
+      "psvi_tier": "HIGH"
+    },
+    {
+      "PCODE": "MR07",
+      "vci_season_avg": 0.0,
+      "rain3mo": 73.75445,
+      "wilaya": "Adrar",
+      "real_score": 1.35,
+      "real_tier": "SEVERE",
+      "tlu": 116432.48,
+      "tlu_km2": 0.4954573617,
+      "area_km2": 235000,
+      "psvi": 0.37,
+      "psvi_tier": "LOW"
+    },
+    {
+      "PCODE": "MR08",
+      "vci_season_avg": 8.5304821342,
+      "rain3mo": 53.710453,
+      "wilaya": "Dakhlet Nouadhibou",
+      "real_score": 1.0,
+      "real_tier": "SEVERE",
+      "tlu": 132481.3,
+      "tlu_km2": 5.7376050238,
+      "area_km2": 23090,
+      "psvi": 5.74,
+      "psvi_tier": "HIGH"
+    },
+    {
+      "PCODE": "MR09",
+      "vci_season_avg": 36.7826134111,
+      "rain3mo": 75.83447,
+      "wilaya": "Tagant",
+      "real_score": 2.5,
+      "real_tier": "HIGH",
+      "tlu": 319539.0,
+      "tlu_km2": 3.2493288591,
+      "area_km2": 98340,
+      "psvi": 1.3,
+      "psvi_tier": "LOW"
+    },
+    {
+      "PCODE": "MR10",
+      "vci_season_avg": 47.8353978851,
+      "rain3mo": 69.38013,
+      "wilaya": "Guidimakha",
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "tlu": 822673.7399999999,
+      "tlu_km2": 79.8712368932,
+      "area_km2": 10300,
+      "psvi": 34.28,
+      "psvi_tier": "VERY HIGH"
+    },
+    {
+      "PCODE": "MR11",
+      "vci_season_avg": 14.586126886,
+      "rain3mo": 91.25289,
+      "wilaya": "Tiris Zemmour",
+      "real_score": 2.52,
+      "real_tier": "HIGH",
+      "tlu": 138362.26,
+      "tlu_km2": 0.5471026493,
+      "area_km2": 252900,
+      "psvi": 0.22,
+      "psvi_tier": "LOW"
+    },
+    {
+      "PCODE": "MR12",
+      "vci_season_avg": 12.7334372366,
+      "rain3mo": 44.04725,
+      "wilaya": "Inchiri",
+      "real_score": 1.65,
+      "real_tier": "SEVERE",
+      "tlu": 52964.74,
+      "tlu_km2": 1.1317252137,
+      "area_km2": 46800,
+      "psvi": 0.69,
+      "psvi_tier": "LOW"
+    },
+    {
+      "PCODE": "MR15",
+      "vci_season_avg": 28.7575898843,
+      "rain3mo": 56.410736,
+      "wilaya": "Nouakchott",
+      "real_score": 1.65,
+      "real_tier": "SEVERE",
+      "tlu": 25952.22,
+      "tlu_km2": 36.8639488636,
+      "area_km2": 704,
+      "psvi": 22.34,
+      "psvi_tier": "VERY HIGH"
+    }
+  ],
+  "admin2": [
+    {
+      "PCODE": "MR012",
+      "vci_season_avg": 74.3764672293,
+      "rain3mo": 85.16058,
+      "real_score": 4.15,
+      "real_tier": "FAVOURABLE",
+      "wilaya": "Hodh Chargui"
+    },
+    {
+      "PCODE": "MR013",
+      "vci_season_avg": 67.2324611783,
+      "rain3mo": 79.68229,
+      "real_score": 3.8,
+      "real_tier": "MODERATE",
+      "wilaya": "Hodh Chargui"
+    },
+    {
+      "PCODE": "MR014",
+      "vci_season_avg": 68.2333360735,
+      "rain3mo": 84.61882,
+      "real_score": 3.8,
+      "real_tier": "MODERATE",
+      "wilaya": "Hodh Chargui"
+    },
+    {
+      "PCODE": "MR015",
+      "vci_season_avg": 32.8391136601,
+      "rain3mo": 90.50515,
+      "real_score": 2.52,
+      "real_tier": "HIGH",
+      "wilaya": "Hodh Chargui"
+    },
+    {
+      "PCODE": "MR016",
+      "vci_season_avg": 53.9712739613,
+      "rain3mo": 80.68477,
+      "real_score": 3.15,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Hodh Chargui"
+    },
+    {
+      "PCODE": "MR018",
+      "vci_season_avg": 74.9609327251,
+      "rain3mo": 85.71765,
+      "real_score": 4.15,
+      "real_tier": "FAVOURABLE",
+      "wilaya": "Hodh Chargui"
+    },
+    {
+      "PCODE": "MR021",
+      "vci_season_avg": 44.7790167443,
+      "rain3mo": 76.11455,
+      "real_score": 2.5,
+      "real_tier": "HIGH",
+      "wilaya": "Hodh El Gharbi"
+    },
+    {
+      "PCODE": "MR022",
+      "vci_season_avg": 72.4969530661,
+      "rain3mo": 77.47187,
+      "real_score": 3.8,
+      "real_tier": "MODERATE",
+      "wilaya": "Hodh El Gharbi"
+    },
+    {
+      "PCODE": "MR023",
+      "vci_season_avg": 65.7461761094,
+      "rain3mo": 70.10859,
+      "real_score": 3.62,
+      "real_tier": "MODERATE",
+      "wilaya": "Hodh El Gharbi"
+    },
+    {
+      "PCODE": "MR024",
+      "vci_season_avg": 69.9850589428,
+      "rain3mo": 73.773735,
+      "real_score": 3.62,
+      "real_tier": "MODERATE",
+      "wilaya": "Hodh El Gharbi"
+    },
+    {
+      "PCODE": "MR031",
+      "vci_season_avg": 40.94032741,
+      "rain3mo": 72.579315,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Assaba"
+    },
+    {
+      "PCODE": "MR032",
+      "vci_season_avg": 64.4718468943,
+      "rain3mo": 69.48263,
+      "real_score": 2.97,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Assaba"
+    },
+    {
+      "PCODE": "MR033",
+      "vci_season_avg": 49.6598504661,
+      "rain3mo": 68.49263,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Assaba"
+    },
+    {
+      "PCODE": "MR034",
+      "vci_season_avg": 62.2810559255,
+      "rain3mo": 71.53704,
+      "real_score": 2.97,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Assaba"
+    },
+    {
+      "PCODE": "MR035",
+      "vci_season_avg": 53.1818597544,
+      "rain3mo": 68.823715,
+      "real_score": 2.97,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Assaba"
+    },
+    {
+      "PCODE": "MR041",
+      "vci_season_avg": 50.0376686886,
+      "rain3mo": 85.758606,
+      "real_score": 3.5,
+      "real_tier": "MODERATE",
+      "wilaya": "Gorgol"
+    },
+    {
+      "PCODE": "MR042",
+      "vci_season_avg": 44.034198807,
+      "rain3mo": 74.12674,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Gorgol"
+    },
+    {
+      "PCODE": "MR043",
+      "vci_season_avg": 46.6394463308,
+      "rain3mo": 74.12901,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Gorgol"
+    },
+    {
+      "PCODE": "MR044",
+      "vci_season_avg": 37.9177651298,
+      "rain3mo": 75.967026,
+      "real_score": 2.5,
+      "real_tier": "HIGH",
+      "wilaya": "Gorgol"
+    },
+    {
+      "PCODE": "MR051",
+      "vci_season_avg": 46.8179219563,
+      "rain3mo": 79.67005,
+      "real_score": 2.5,
+      "real_tier": "HIGH",
+      "wilaya": "Brakna"
+    },
+    {
+      "PCODE": "MR052",
+      "vci_season_avg": 36.8475757009,
+      "rain3mo": 94.15058,
+      "real_score": 2.85,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Brakna"
+    },
+    {
+      "PCODE": "MR053",
+      "vci_season_avg": 74.1198909017,
+      "rain3mo": 93.65709,
+      "real_score": 4.15,
+      "real_tier": "FAVOURABLE",
+      "wilaya": "Brakna"
+    },
+    {
+      "PCODE": "MR054",
+      "vci_season_avg": 38.6364289478,
+      "rain3mo": 64.80678,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Brakna"
+    },
+    {
+      "PCODE": "MR055",
+      "vci_season_avg": 58.762952627,
+      "rain3mo": 95.26474,
+      "real_score": 3.85,
+      "real_tier": "MODERATE",
+      "wilaya": "Brakna"
+    },
+    {
+      "PCODE": "MR061",
+      "vci_season_avg": 50.6876976613,
+      "rain3mo": 69.27735,
+      "real_score": 2.97,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Trarza"
+    },
+    {
+      "PCODE": "MR062",
+      "vci_season_avg": 88.6552571026,
+      "rain3mo": 90.796036,
+      "real_score": 4.15,
+      "real_tier": "FAVOURABLE",
+      "wilaya": "Trarza"
+    },
+    {
+      "PCODE": "MR063",
+      "vci_season_avg": 70.494487776,
+      "rain3mo": 83.81425,
+      "real_score": 3.8,
+      "real_tier": "MODERATE",
+      "wilaya": "Trarza"
+    },
+    {
+      "PCODE": "MR064",
+      "vci_season_avg": 40.7746604379,
+      "rain3mo": 58.143692,
+      "real_score": 1.98,
+      "real_tier": "HIGH",
+      "wilaya": "Trarza"
+    },
+    {
+      "PCODE": "MR065",
+      "vci_season_avg": 82.0193363109,
+      "rain3mo": 88.36621,
+      "real_score": 4.15,
+      "real_tier": "FAVOURABLE",
+      "wilaya": "Trarza"
+    },
+    {
+      "PCODE": "MR066",
+      "vci_season_avg": 98.5113514378,
+      "rain3mo": 90.4724,
+      "real_score": 4.15,
+      "real_tier": "FAVOURABLE",
+      "wilaya": "Trarza"
+    },
+    {
+      "PCODE": "MR071",
+      "vci_season_avg": 14.1741265555,
+      "rain3mo": 61.0735,
+      "real_score": 2.0,
+      "real_tier": "HIGH",
+      "wilaya": "Adrar"
+    },
+    {
+      "PCODE": "MR072",
+      "vci_season_avg": 15.0878107819,
+      "rain3mo": 53.009445,
+      "real_score": 1.65,
+      "real_tier": "SEVERE",
+      "wilaya": "Adrar"
+    },
+    {
+      "PCODE": "MR073",
+      "vci_season_avg": 0.0,
+      "rain3mo": 82.066574,
+      "real_score": 1.52,
+      "real_tier": "SEVERE",
+      "wilaya": "Adrar"
+    },
+    {
+      "PCODE": "MR074",
+      "vci_season_avg": 0.0,
+      "rain3mo": 79.56281,
+      "real_score": 1.52,
+      "real_tier": "SEVERE",
+      "wilaya": "Adrar"
+    },
+    {
+      "PCODE": "MR081",
+      "vci_season_avg": 8.5304821342,
+      "rain3mo": 53.710453,
+      "real_score": 1.0,
+      "real_tier": "SEVERE",
+      "wilaya": "Dakhlet Nouadhibou"
+    },
+    {
+      "PCODE": "MR091",
+      "vci_season_avg": 59.1259732413,
+      "rain3mo": 66.21396,
+      "real_score": 2.97,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Tagant"
+    },
+    {
+      "PCODE": "MR092",
+      "vci_season_avg": 23.800106377,
+      "rain3mo": 81.70527,
+      "real_score": 2.17,
+      "real_tier": "HIGH",
+      "wilaya": "Tagant"
+    },
+    {
+      "PCODE": "MR093",
+      "vci_season_avg": 44.3677501622,
+      "rain3mo": 68.86221,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Tagant"
+    },
+    {
+      "PCODE": "MR101",
+      "vci_season_avg": 43.4235201469,
+      "rain3mo": 70.7681,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Guidimakha"
+    },
+    {
+      "PCODE": "MR103",
+      "vci_season_avg": 49.2527906263,
+      "rain3mo": 68.87198,
+      "real_score": 2.33,
+      "real_tier": "HIGH",
+      "wilaya": "Guidimakha"
+    },
+    {
+      "PCODE": "MR111",
+      "vci_season_avg": 25.3279502315,
+      "rain3mo": 86.01487,
+      "real_score": 2.52,
+      "real_tier": "HIGH",
+      "wilaya": "Tiris Zemmour"
+    },
+    {
+      "PCODE": "MR112",
+      "vci_season_avg": 6.9952916277,
+      "rain3mo": 93.28205,
+      "real_score": 1.88,
+      "real_tier": "HIGH",
+      "wilaya": "Tiris Zemmour"
+    },
+    {
+      "PCODE": "MR113",
+      "vci_season_avg": 16.2012595483,
+      "rain3mo": 95.967064,
+      "real_score": 2.88,
+      "real_tier": "MODERATE-HIGH",
+      "wilaya": "Tiris Zemmour"
+    },
+    {
+      "PCODE": "MR122",
+      "vci_season_avg": 12.7334372366,
+      "rain3mo": 44.04725,
+      "real_score": 1.65,
+      "real_tier": "SEVERE",
+      "wilaya": "Inchiri"
+    },
+    {
+      "PCODE": "MR151",
+      "vci_season_avg": 28.7575898843,
+      "rain3mo": 56.410736,
+      "real_score": 1.65,
+      "real_tier": "SEVERE",
+      "wilaya": "Nouakchott"
+    }
+  ],
+  "n_admin1": 13,
+  "n_admin2_total": 45,
+  "n_admin2_with_data": 45,
+  "content_hash": "52a054e99fb59107"
+}
