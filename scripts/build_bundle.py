@@ -113,6 +113,6 @@ if __name__ == "__main__":
     # signal to the workflow whether anything actually changed
     changed = not (args.prev_state and Path(args.prev_state).exists()
                    and json.load(open(args.prev_state)).get("content_hash") == state["content_hash"])
-   print(f"Changed since previous state: {'true' if changed else 'false'}")
+    print(f"Changed since previous state: {'true' if changed else 'false'}")
     with open("bundle_changed.flag", "w") as f:
         f.write("true" if changed else "false")
