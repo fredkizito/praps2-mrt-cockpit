@@ -78,6 +78,29 @@
   td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right;}
   tr:hover td{background:rgba(79,168,201,0.05);cursor:pointer;}
 
+  .decision{border:1px solid var(--border);border-left:4px solid var(--accent);background:var(--panel);margin-bottom:22px;}
+  .decision .panel-head{border-bottom:1px solid var(--border);}
+  .decision-msg{padding:16px 20px 6px;font-size:14.5px;line-height:1.7;color:var(--text);}
+  .decision-msg p{margin:0 0 10px;}
+  .decision-actions{padding:4px 20px 8px;}
+  .dec-row{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--border-soft);font-size:13.5px;line-height:1.6;}
+  .dec-tag{flex:0 0 78px;text-align:center;padding:2px 0;font-size:10.5px;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:0.02em;}
+  .dec-tag.act{background:var(--severe);color:#FBEFEA;} .dec-tag.watch{background:var(--modhigh);color:#241a05;} .dec-tag.check{background:var(--favourable);color:#0f1a0c;}
+  .decision-basis{padding:8px 20px 14px;font-size:11.5px;color:var(--text-dim);line-height:1.6;}
+  .trend-layout{display:grid;grid-template-columns:1fr 1.35fr;}
+  @media (max-width:980px){.trend-layout{grid-template-columns:1fr;}}
+  .trend-board{border-right:1px solid var(--border);max-height:430px;overflow-y:auto;}
+  @media (max-width:980px){.trend-board{border-right:none;border-bottom:1px solid var(--border);}}
+  .trend-board table{font-size:12.5px;}
+  .trend-board td,.trend-board th{padding:8px 12px;}
+  .trend-board tr.sel td{background:rgba(79,168,201,0.10);}
+  .dir{display:inline-block;padding:2px 9px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
+  .dir.worse{background:var(--severe);color:#FBEFEA;} .dir.better{background:var(--favourable);color:#0f1a0c;} .dir.stable{background:#3a444a;color:var(--text-muted);}
+  .delta-neg{color:#E58A80;} .delta-pos{color:#8FC37E;}
+  .trend-chart-wrap{padding:16px 18px;}
+  .trend-chart-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+  .trend-chart-sub{font-size:12px;color:var(--text-muted);margin-bottom:8px;line-height:1.5;}
+  .trend-legend{font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.6;}
   .engine-note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);padding:12px 18px;border-top:1px solid var(--border);}
   footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-dim);font-size:11.5px;line-height:1.7;}
   footer b{color:var(--text-muted);}
@@ -99,6 +122,16 @@
 </header>
 
 <div class="strip" id="strip"></div>
+
+<div class="decision" id="decision-panel">
+  <div class="panel-head">
+    <h2>Decision panel</h2>
+    <span class="note">written automatically from the latest data</span>
+  </div>
+  <div class="decision-msg" id="decision-msg"></div>
+  <div class="decision-actions" id="decision-actions"></div>
+  <div class="decision-basis" id="decision-basis"></div>
+</div>
 
 <div class="layout">
   <div class="panel">
@@ -123,6 +156,31 @@
       <div id="no-data-flag"></div>
       <canvas id="trendChart" height="130" style="margin-top:14px;"></canvas>
       <div class="action-box" id="action-box"></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="trend-panel" style="margin-bottom:20px;">
+  <div class="panel-head">
+    <h2>Season trend</h2>
+    <span class="note" id="trend-note">real resource score by dekad &middot; click a row, a wilaya, or a moughataa</span>
+  </div>
+  <div class="panel-body" id="trend-body">
+    <div class="trend-layout">
+      <div class="trend-board">
+        <table id="trendTable">
+          <thead><tr>
+            <th>Wilaya</th><th class="num">Start</th><th class="num">Latest</th><th class="num">Change</th><th>Last 3 dekads</th>
+          </tr></thead>
+          <tbody id="trendBody"></tbody>
+        </table>
+      </div>
+      <div class="trend-chart-wrap">
+        <div class="trend-chart-title" id="trendChartTitle">Select a unit</div>
+        <div class="trend-chart-sub" id="trendChartSub"></div>
+        <div id="scoreTrendBox"><canvas id="scoreTrendChart" height="190"></canvas></div>
+        <div class="trend-legend">Dashed lines are tier boundaries: below 1.75 severe &middot; 2.75 high &middot; 3.25 moderate-high &middot; 4.0 moderate. Lower is worse. Faint grey lines are the other wilayas, for context.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -361,6 +419,7 @@ function selectWilaya(name){
   document.getElementById('no-data-flag').innerHTML = '';
   document.getElementById('action-box').textContent = recommend(d.real_tier, d.psvi_tier);
   renderTrend(d.PCODE, d.wilaya);
+  renderScoreTrend('w', name);
   document.querySelectorAll('#priorityTable tr').forEach(tr => tr.style.background = tr.dataset.wilaya===name ? 'rgba(79,168,201,0.08)' : '');
 }
 
@@ -379,11 +438,13 @@ function selectMoughataa(pcode){
     document.getElementById('no-data-flag').innerHTML = '';
     document.getElementById('action-box').textContent = recommend(d.real_tier, null);
     renderTrend(pcode, pcode);
+    renderScoreTrend('m', pcode);
   } else {
     document.getElementById('detail-kv').innerHTML = '';
     document.getElementById('no-data-flag').innerHTML = '<div class="data-flag">Not covered by the current WFP NDVI/rainfall admin-2 series — a data-vintage gap, not a boundary gap. Parent wilaya tier is the best available fallback.</div>';
     document.getElementById('action-box').textContent = 'No live signal for this moughataa yet — fall back to the parent wilaya tier shown on the national map.';
     if(trendChart){ trendChart.destroy(); trendChart=null; }
+    renderScoreTrend('w', d.wilaya);
   }
 }
 
@@ -451,6 +512,203 @@ document.querySelectorAll('#priorityTable th').forEach(th=>{
   });
 });
 renderTable();
+
+// ---- season trend panel ----
+// Reads BUNDLE.history (built from the backfilled dekad snapshots). The table
+// needs no chart library; the chart waits for Chart.js like every other chart.
+const HIST = BUNDLE.history;
+let scoreChart = null;
+const TIER_LINES = [
+  {y:1.75, c:'#C0463B'}, {y:2.75, c:'#D98B3F'}, {y:3.25, c:'#D9A34A'}, {y:4.0, c:'#D9BC55'}
+];
+function shortDate(d){ return d.slice(5); }
+function fmtDelta(v){
+  if(v===null || v===undefined) return '<span>—</span>';
+  const cls = v<=-0.25 ? 'delta-neg' : (v>=0.25 ? 'delta-pos' : '');
+  return `<span class="${cls}">${v>0?'+':''}${v.toFixed(2)}</span>`;
+}
+function dirPill(label){
+  const cls = label==='Worsening' ? 'worse' : (label==='Improving' ? 'better' : 'stable');
+  return `<span class="dir ${cls}">${label}</span>`;
+}
+function renderTrendBoard(){
+  const body = document.getElementById('trendBody');
+  const rows = (HIST && HIST.trends) ? HIST.trends : [];
+  body.innerHTML = rows.map(r => `
+    <tr data-wilaya="${r.wilaya}">
+      <td>${r.wilaya}</td>
+      <td class="num">${r.first_score.toFixed(2)}</td>
+      <td class="num">${r.latest_score.toFixed(2)}</td>
+      <td class="num">${fmtDelta(r.season_change)}</td>
+      <td>${dirPill(r.recent_trend)}</td>
+    </tr>`).join('');
+  body.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () => {
+    const w = tr.dataset.wilaya; showAdmin2(w); selectWilaya(w);
+  }));
+}
+function markTrendRow(wilaya){
+  document.querySelectorAll('#trendBody tr').forEach(tr => tr.classList.toggle('sel', tr.dataset.wilaya===wilaya));
+}
+function renderScoreTrend(kind, key){
+  const panel = document.getElementById('trend-panel');
+  if(!HIST || !HIST.dates || HIST.dates.length < 2){
+    document.getElementById('trend-body').innerHTML =
+      '<div style="padding:24px;color:var(--text-muted);font-size:12.5px;line-height:1.7;">Trend history is not available yet. It is built from saved dekad snapshots; once the pipeline has run with the backfill step, this panel fills in automatically.</div>';
+    return;
+  }
+  let title, sub, wilaya, hi, parent = null;
+  if(kind==='m' && HIST.admin2[key]){
+    const m = HIST.admin2[key];
+    wilaya = m.wilaya; hi = m.scores; parent = HIST.admin1[wilaya] || null;
+    title = key + ' (moughataa, ' + wilaya + ')';
+  } else {
+    wilaya = (kind==='m') ? ((admin2ByPcode[key]||{}).wilaya || key) : key;
+    hi = HIST.admin1[wilaya]; title = wilaya;
+  }
+  markTrendRow(wilaya);
+  const t = (HIST.trends||[]).find(r => r.wilaya===wilaya);
+  const vals = (hi||[]).filter(v => v!==null);
+  if(vals.length){
+    const change = vals[vals.length-1] - vals[0];
+    sub = `${shortDate(HIST.dates[0])} to ${shortDate(HIST.dates[HIST.dates.length-1])}: ${vals[0].toFixed(2)} to ${vals[vals.length-1].toFixed(2)} (${change>0?'+':''}${change.toFixed(2)})` +
+          (t && kind!=='m' ? ` · last 3 dekads: ${t.recent_trend.toLowerCase()}` : '');
+  } else { sub = 'No history for this unit.'; }
+  document.getElementById('trendChartTitle').textContent = title;
+  document.getElementById('trendChartSub').textContent = sub;
+
+  const box = document.getElementById('scoreTrendBox');
+  if(typeof Chart === 'undefined'){
+    box.innerHTML = libFailureNotice('Chart library (Chart.js)');
+    return;
+  }
+  if(!document.getElementById('scoreTrendChart')){ box.innerHTML = '<canvas id="scoreTrendChart" height="190"></canvas>'; }
+  if(scoreChart){ scoreChart.destroy(); scoreChart = null; }
+  const labels = HIST.dates.map(shortDate);
+  const datasets = [];
+  Object.keys(HIST.admin1).forEach(w => {
+    if(w===wilaya && kind!=='m') return;
+    datasets.push({label:w, data:HIST.admin1[w], borderColor:'rgba(154,163,168,0.28)', borderWidth:1,
+                   pointRadius:0, tension:0.2, spanGaps:true, order:5});
+  });
+  if(kind==='m' && parent){
+    datasets.push({label:wilaya+' (wilaya)', data:parent, borderColor:'#D9BC55', borderWidth:2, borderDash:[6,3],
+                   pointRadius:0, tension:0.2, spanGaps:true, order:2});
+  }
+  datasets.push({label:title, data:hi, borderColor:'#4FA8C9', backgroundColor:'#4FA8C9', borderWidth:3,
+                 pointRadius:3.5, tension:0.2, spanGaps:true, order:1});
+  TIER_LINES.forEach(tl => datasets.push({label:'tier '+tl.y, data:labels.map(()=>tl.y), borderColor:tl.c,
+                 borderWidth:1, borderDash:[4,4], pointRadius:0, order:6}));
+  scoreChart = new Chart(document.getElementById('scoreTrendChart').getContext('2d'), {
+    type:'line', data:{labels, datasets},
+    options:{
+      animation:false,
+      plugins:{legend:{display:false}, tooltip:{filter:(item)=> !String(item.dataset.label).startsWith('tier ')}},
+      scales:{
+        x:{ticks:{color:'#6C767B', font:{size:10}}, grid:{color:'#2A3237'}},
+        y:{min:0.8, max:5, ticks:{color:'#6C767B', font:{size:10}}, grid:{color:'#2A3237'},
+           title:{display:true, text:'Real resource score', color:'#9AA3A8', font:{size:10}}}
+      }
+    }
+  });
+}
+renderTrendBoard();
+
+// ---- decision panel: a plain-language message generated from the data ----
+// Nothing here is typed text. Every name, number and count comes from
+// BUNDLE.history (season trends) and BUNDLE.state (current tiers, PSVI), so the
+// message stays correct as each new dekad arrives.
+const NUM_WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const nw = n => (n >= 0 && n <= 20) ? NUM_WORDS[n] : String(n);
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const joinList = a => a.length <= 1 ? a.join('') : a.slice(0,-1).join(', ') + ' and ' + a[a.length-1];
+const monthOf = d => MONTH_NAMES[parseInt(d.slice(5,7),10) - 1];
+
+function buildDecision(){
+  const wil = BUNDLE.state.admin1.filter(d => d.wilaya !== 'Nouakchott');
+  const byName = {}; wil.forEach(d => byName[d.wilaya] = d);
+  const sev  = wil.filter(d => d.real_tier === 'SEVERE').map(d => d.wilaya);
+  const high = wil.filter(d => d.real_tier === 'HIGH').map(d => d.wilaya);
+  const msg = [], actions = [];
+  let basis = '';
+
+  if(!HIST || !HIST.trends || !HIST.trends.length){
+    msg.push(sev.length
+      ? `${cap(nw(sev.length))} wilaya${sev.length>1?'s are':' is'} currently at severe risk: ${joinList(sev)}. Season trend analysis is not available yet; it appears here once the pipeline has built the dekad history.`
+      : 'Season trend analysis is not available yet; it appears here once the pipeline has built the dekad history.');
+  } else {
+    const T = HIST.trends, total = T.length;
+    const first = HIST.dates[0], last = HIST.dates[HIST.dates.length - 1];
+    const sameMonth = monthOf(first) === monthOf(last);
+    const from = sameMonth ? 'on ' + first.slice(5) : 'in ' + monthOf(first);
+    const to   = sameMonth ? 'on ' + last.slice(5)  : 'by ' + monthOf(last);
+    const f2 = v => v.toFixed(2);
+
+    // 1. how many are worsening
+    const worse = T.filter(r => r.season_trend === 'Worsening');
+    msg.push(
+      worse.length === 0 ? 'No wilaya is worsening over the season.'
+      : worse.length === total ? `All ${nw(total)} wilayas are worsening over the season.`
+      : `${cap(nw(worse.length))} of ${nw(total)} wilayas are worsening over the season.`);
+
+    // 2. steepest fall, then the most livestock-pressured wilaya if it is a different one
+    const steepest = [...T].sort((a,b) => a.season_change - b.season_change)[0];
+    let s2 = '';
+    if(steepest && steepest.season_change < 0){
+      const t = byName[steepest.wilaya];
+      s2 = `The steepest fall is ${steepest.wilaya}, from ${f2(steepest.first_score)} ${from} to ${f2(steepest.latest_score)} ${to}` +
+           (t ? ` (now ${t.real_tier.toLowerCase()})` : '') + '.';
+    }
+    const pressured = [...T].filter(r => byName[r.wilaya] && byName[r.wilaya].psvi != null)
+                            .sort((a,b) => byName[b.wilaya].psvi - byName[a.wilaya].psvi)[0];
+    if(pressured && (!steepest || pressured.wilaya !== steepest.wilaya) && pressured.season_change < 0){
+      s2 += ` ${pressured.wilaya}, the most livestock-pressured wilaya (PSVI ${byName[pressured.wilaya].psvi.toFixed(1)}), fell from ${f2(pressured.first_score)} ${from} to ${f2(pressured.latest_score)} ${to}.`;
+    }
+    if(s2) msg[0] += ' ' + s2.trim();
+
+    // 3. recent upticks that have not made up the season's loss
+    const R = T.filter(r => r.recent_trend === 'Improving' && r.season_change < 0).map(r => r.wilaya);
+    const U = T.filter(r => r.season_change > 0).map(r => r.wilaya);
+    let s3 = '';
+    if(R.length){
+      const both = R.length === 2 ? 'both are' : (R.length > 2 ? 'all are' : 'it is');
+      s3 = `${joinList(R)} ${R.length>1?'have':'has'} ticked up over the last three dekads, but ${both} still below ${R.length>1?'where they':'where it'} started.`;
+    }
+    if(U.length === 1) s3 += ` ${U[0]} is the only wilaya that ended the season higher than it began.`;
+    else if(U.length > 1) s3 += ` ${joinList(U)} ended the season higher than they began.`;
+    else s3 += ' No wilaya ended the season higher than it began.';
+    msg.push(s3.trim());
+
+    // what this means: rule-based pointers that mirror the report's priorities
+    const pr1 = sev.concat(high);
+    if(pr1.length){
+      actions.push({tag:'act', cls:'act', text:
+        `Prioritise emergency feed and water support in ${joinList(sev)}${sev.length?' (severe)':''}` +
+        (high.length ? `${sev.length?', then ':''}${joinList(high)} (high)` : '') + '.'});
+    }
+    const vh = wil.filter(d => d.psvi_tier === 'VERY HIGH' && !pr1.includes(d.wilaya)).map(d => d.wilaya);
+    if(vh.length){
+      const declining = vh.filter(n => { const r = T.find(x => x.wilaya === n); return r && r.season_trend === 'Worsening'; });
+      actions.push({tag:'watch', cls:'watch', text:
+        `Monitor reserve drawdown in ${joinList(vh)}: very high livestock pressure${declining.length===vh.length?' on a declining resource base':''}, and the likely destinations for displaced herds.`});
+    }
+    if(U.length){
+      actions.push({tag:'re-check', cls:'check', text:
+        `Re-check before committing new resources in ${joinList(U)}: ${U.length>1?'their scores are':'its score is'} higher than at the start of the season.`});
+    }
+    basis = `Based on ${HIST.dates.length} dekads, ${first} to ${last} (latest dekad with data: ${BUNDLE.state.as_of}). `;
+  }
+  basis += 'Generated by rules from the data on this page; treat it as a prompt for review, not an instruction.';
+  return {msg, actions, basis};
+}
+function renderDecision(){
+  const d = buildDecision();
+  document.getElementById('decision-msg').innerHTML = d.msg.map(p => `<p>${p}</p>`).join('');
+  document.getElementById('decision-actions').innerHTML = d.actions.map(a =>
+    `<div class="dec-row"><span class="dec-tag ${a.cls}">${a.tag.toUpperCase()}</span><span>${a.text}</span></div>`).join('');
+  document.getElementById('decision-basis').textContent = d.basis;
+}
+renderDecision();
 
 // showAdmin1() is now called automatically once Leaflet is confirmed loaded (see waitForGlobal('L', ...) above)
 selectWilaya('Adrar');
