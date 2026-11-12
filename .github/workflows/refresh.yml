@@ -46,6 +46,19 @@ jobs:
             python3 scripts/fetch_hdx_data.py --out-dir data
           fi
 
+      - name: Backfill missing dekad snapshots and build trend analysis
+        id: hist
+        run: |
+          python3 scripts/backfill_history.py --config config/countries/mrt.json --out-dir output
+          python3 scripts/build_trends.py --history output/history_MRT.csv --out-dir output --iso MRT
+          # Tell the commit step whether backfill created anything new, so a run
+          # where the latest data is unchanged still saves recovered history.
+          if [ -n "$(git status --porcelain output/)" ]; then
+            echo "added=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "added=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Locate previous state (for the alert diff)
         id: prev
         run: |
@@ -65,6 +78,8 @@ jobs:
             --admin1-geo cockpit/admin1.json \
             --admin2-geo cockpit/admin2.json \
             --fetch-manifest data/fetch_manifest.json \
+            --history output/history_MRT.csv \
+            --trends output/trends_MRT.csv \
             --out-dir output \
             --bundle-out cockpit/bundle.json
           echo "changed=$(cat bundle_changed.flag)" >> "$GITHUB_OUTPUT"
@@ -100,7 +115,7 @@ jobs:
             --slack-webhook "$SLACK_WEBHOOK_URL"
 
       - name: Commit refreshed data back to the repo
-        if: steps.bundle.outputs.changed == 'true'
+        if: steps.bundle.outputs.changed == 'true' || steps.hist.outputs.added == 'true'
         run: |
           git config user.name "praps2-bot"
           git config user.email "actions@users.noreply.github.com"
