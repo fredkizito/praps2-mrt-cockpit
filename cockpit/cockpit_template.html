@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgriConnect Pastoral Early Warning Cockpit v2 — Moughataa Drill-Down</title>
+<title>AgriConnect Pastoral Early Warning Cockpit v2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
       onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css'">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
@@ -20,20 +20,20 @@
     --accent:#4FA8C9; --accent-dim:#2E4E5A;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans','IBM Plex Sans Arabic',sans-serif;}
   body{padding:28px 32px 60px;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
-  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;}
+  h1,h2,h3{font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;margin:0;letter-spacing:-0.01em;}
 
   header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px;flex-wrap:wrap;gap:14px;}
   header h1{font-size:26px;font-weight:600;}
   header .sub{color:var(--text-muted);font-size:14px;margin-top:6px;max-width:640px;line-height:1.5;}
-  .dekad-badge{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);border:1px solid var(--accent-dim);background:rgba(79,168,201,0.08);padding:7px 14px;white-space:nowrap;} .dekad-badge.secondary{color:var(--text-muted);border:1px solid var(--border);background:rgba(255,255,255,0.03);font-size:11.5px;padding:6px 14px;}
+  .dekad-badge{font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;font-size:13px;color:var(--accent);border:1px solid var(--accent-dim);background:rgba(79,168,201,0.08);padding:7px 14px;white-space:nowrap;} .dekad-badge.secondary{color:var(--text-muted);border:1px solid var(--border);background:rgba(255,255,255,0.03);font-size:11.5px;padding:6px 14px;}
   .badge-stack{display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
 
   .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:26px;border:1px solid var(--border);}
   .stat{background:var(--panel);padding:18px 20px;}
-  .stat .num{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;line-height:1;}
+  .stat .num{font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;font-size:28px;font-weight:600;line-height:1;}
   .stat .lbl{color:var(--text-muted);font-size:12.5px;margin-top:8px;line-height:1.4;}
   .stat.sev .num{color:var(--severe);} .stat.hi .num{color:var(--high);} .stat.acc .num{color:var(--accent);} .stat.fav .num{color:var(--favourable);}
 
@@ -46,7 +46,7 @@
   .panel-body{padding:0;}
   .panel-body.pad{padding:18px;}
 
-  #map{height:560px;background:var(--panel-2);}
+  #map{height:560px;background:var(--panel-2);direction:ltr;}
   .leaflet-container{background:var(--panel-2);font-family:'IBM Plex Sans',sans-serif;}
   .map-controls{padding:10px 18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
   .btn{background:var(--panel-2);border:1px solid var(--border);color:var(--text-muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
@@ -59,65 +59,78 @@
   #detail-sub{color:var(--text-muted);font-size:13px;margin-top:2px;}
   .kv-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:13.5px;}
   .kv-row .k{color:var(--text-muted);}
-  .kv-row .v{font-family:'IBM Plex Mono',monospace;}
-  .tier-pill{display:inline-block;padding:3px 10px;font-size:11.5px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
-  .action-box{margin-top:14px;padding:12px 14px;background:var(--panel-2);border-left:3px solid var(--accent);font-size:13.5px;line-height:1.5;}
-  .data-flag{margin-top:10px;padding:8px 12px;background:rgba(217,169,74,0.1);border-left:3px solid var(--nodata);font-size:12px;color:var(--text-muted);}
+  .kv-row .v{font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;}
+  .tier-pill{display:inline-block;padding:3px 10px;font-size:11.5px;font-weight:600;font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;}
+  .action-box{margin-top:14px;padding:12px 14px;background:var(--panel-2);border-inline-start:3px solid var(--accent);font-size:13.5px;line-height:1.5;}
+  .data-flag{margin-top:10px;padding:8px 12px;background:rgba(217,169,74,0.1);border-inline-start:3px solid var(--nodata);font-size:12px;color:var(--text-muted);}
   canvas{max-width:100%;}
 
-  .alert-log{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.85;max-height:320px;overflow-y:auto;}
+  .alert-log{font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;font-size:12px;line-height:1.85;max-height:320px;overflow-y:auto;}
   .alert-log .row{display:flex;gap:10px;padding:6px 18px;border-bottom:1px solid var(--border-soft);}
   .alert-log .badge{padding:1px 7px;font-size:10px;font-weight:600;height:fit-content;white-space:nowrap;}
   .b-critical{background:var(--severe);color:#FBEFEA;} .b-high{background:var(--high);color:#231705;}
   .b-medium{background:var(--modhigh);color:#241a05;} .b-info{background:var(--accent-dim);color:var(--accent);}
 
   table{width:100%;border-collapse:collapse;font-size:13px;}
-  th{text-align:left;font-weight:600;color:var(--text-muted);font-size:11.5px;padding:8px 18px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+  th{text-align:start;font-weight:600;color:var(--text-muted);font-size:11.5px;padding:8px 18px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
   th:hover{color:var(--accent);}
   td{padding:9px 18px;border-bottom:1px solid var(--border-soft);}
-  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right;}
+  td.num,th.num{font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;text-align:end;}
   tr:hover td{background:rgba(79,168,201,0.05);cursor:pointer;}
 
-  .decision{border:1px solid var(--border);border-left:4px solid var(--accent);background:var(--panel);margin-bottom:22px;}
+  .decision{border:1px solid var(--border);border-inline-start:4px solid var(--accent);background:var(--panel);margin-bottom:22px;}
   .decision .panel-head{border-bottom:1px solid var(--border);}
   .decision-msg{padding:16px 20px 6px;font-size:14.5px;line-height:1.7;color:var(--text);}
   .decision-msg p{margin:0 0 10px;}
   .decision-actions{padding:4px 20px 8px;}
   .dec-row{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--border-soft);font-size:13.5px;line-height:1.6;}
-  .dec-tag{flex:0 0 78px;text-align:center;padding:2px 0;font-size:10.5px;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:0.02em;}
+  .dec-tag{flex:0 0 78px;text-align:center;padding:2px 0;font-size:10.5px;font-weight:600;font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;letter-spacing:0.02em;}
   .dec-tag.act{background:var(--severe);color:#FBEFEA;} .dec-tag.watch{background:var(--modhigh);color:#241a05;} .dec-tag.check{background:var(--favourable);color:#0f1a0c;}
   .decision-basis{padding:8px 20px 14px;font-size:11.5px;color:var(--text-dim);line-height:1.6;}
   .trend-layout{display:grid;grid-template-columns:1fr 1.35fr;}
   @media (max-width:980px){.trend-layout{grid-template-columns:1fr;}}
-  .trend-board{border-right:1px solid var(--border);max-height:430px;overflow-y:auto;}
-  @media (max-width:980px){.trend-board{border-right:none;border-bottom:1px solid var(--border);}}
+  .trend-board{border-inline-end:1px solid var(--border);max-height:430px;overflow-y:auto;}
+  @media (max-width:980px){.trend-board{border-inline-end:none;border-bottom:1px solid var(--border);}}
   .trend-board table{font-size:12.5px;}
   .trend-board td,.trend-board th{padding:8px 12px;}
   .trend-board tr.sel td{background:rgba(79,168,201,0.10);}
-  .dir{display:inline-block;padding:2px 9px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
+  .dir{display:inline-block;padding:2px 9px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;}
   .dir.worse{background:var(--severe);color:#FBEFEA;} .dir.better{background:var(--favourable);color:#0f1a0c;} .dir.stable{background:#3a444a;color:var(--text-muted);}
   .delta-neg{color:#E58A80;} .delta-pos{color:#8FC37E;}
   .trend-chart-wrap{padding:16px 18px;}
   .trend-chart-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;margin-bottom:2px;}
   .trend-chart-sub{font-size:12px;color:var(--text-muted);margin-bottom:8px;line-height:1.5;}
   .trend-legend{font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.6;}
-  .engine-note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);padding:12px 18px;border-top:1px solid var(--border);}
+  .engine-note{font-family:'IBM Plex Mono','IBM Plex Sans Arabic',monospace;font-size:11px;color:var(--text-dim);padding:12px 18px;border-top:1px solid var(--border);}
   footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-dim);font-size:11.5px;line-height:1.7;}
   footer b{color:var(--text-muted);}
   footer a{color:var(--accent);text-decoration:none;}
   footer a:hover{text-decoration:underline;}
+
+  .lang-switch{display:flex;border:1px solid var(--border);align-self:flex-end;}
+  .lang-btn{background:var(--panel-2);color:var(--text-muted);border:0;border-inline-start:1px solid var(--border);padding:6px 14px;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans','IBM Plex Sans Arabic',sans-serif;}
+  .lang-btn:first-child{border-inline-start:0;}
+  .lang-btn:hover{color:var(--accent);}
+  .lang-btn.active{background:var(--accent);color:#0b1215;font-weight:600;}
+  .lang-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+  footer > div{margin-bottom:4px;}
 </style>
 </head>
 <body>
 
 <header>
   <div>
-    <h1>AgriConnect Pastoral early warning cockpit — v2</h1>
-    <div class="sub">Mauritania · AgriConnect · real Leaflet map on official ANSADE boundaries · wilaya-to-moughataa drill-down · fed directly by praps2_engine.py, not hand-entered</div>
+    <h1 data-i18n="title"></h1>
+    <div class="sub" data-i18n="subtitle"></div>
   </div>
-   <div class="badge-stack">
-    <div class="dekad-badge" id="dekad-badge" title="The most recent dekad for which real NDVI/rainfall data actually exists">LATEST DEKAD WITH DATA</div>
-    <div class="dekad-badge secondary" id="resource-touched-badge" style="display:none;" title="When HDX last modified the source file - can differ from the badge above if the file was re-validated or corrected without new dekad rows being added yet"></div>
+  <div class="badge-stack">
+    <div class="lang-switch" role="group" aria-label="Language / Langue / اللغة">
+      <button type="button" class="lang-btn" data-lang="en" lang="en">English</button>
+      <button type="button" class="lang-btn" data-lang="fr" lang="fr">Français</button>
+      <button type="button" class="lang-btn" data-lang="ar" lang="ar">العربية</button>
+    </div>
+    <div class="dekad-badge" id="dekad-badge" data-i18n-title="badge.dekadTitle"></div>
+    <div class="dekad-badge secondary" id="resource-touched-badge" style="display:none;" data-i18n-title="badge.touchedTitle"></div>
   </div>
 </header>
 
@@ -125,8 +138,8 @@
 
 <div class="decision" id="decision-panel">
   <div class="panel-head">
-    <h2>Decision panel</h2>
-    <span class="note">written automatically from the latest data</span>
+    <h2 data-i18n="dec.title"></h2>
+    <span class="note" data-i18n="dec.note"></span>
   </div>
   <div class="decision-msg" id="decision-msg"></div>
   <div class="decision-actions" id="decision-actions"></div>
@@ -136,20 +149,20 @@
 <div class="layout">
   <div class="panel">
     <div class="panel-head">
-      <h2>Real geography — click a wilaya, then a moughataa</h2>
-      <span class="breadcrumb" id="breadcrumb"><b>National</b></span>
+      <h2 data-i18n="map.title"></h2>
+      <span class="breadcrumb" id="breadcrumb"></span>
     </div>
     <div class="panel-body">
       <div id="map"></div>
       <div class="map-controls">
-        <span style="font-size:11.5px;color:var(--text-dim)">boundaries: ANSADE/HDX COD-AB, official</span>
-        <button class="btn" id="back-btn" style="display:none">&larr; back to national view</button>
+        <span style="font-size:11.5px;color:var(--text-dim)" data-i18n="map.bounds"></span>
+        <button class="btn" id="back-btn" style="display:none" data-i18n="btn.back"></button>
       </div>
     </div>
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h2 id="detail-name">Select a unit</h2></div>
+    <div class="panel-head"><h2 id="detail-name"></h2></div>
     <div class="panel-body pad">
       <div id="detail-sub" style="margin-bottom:10px;"></div>
       <div id="detail-kv"></div>
@@ -162,43 +175,44 @@
 
 <div class="panel" id="trend-panel" style="margin-bottom:20px;">
   <div class="panel-head">
-    <h2>Season trend</h2>
-    <span class="note" id="trend-note">real resource score by dekad &middot; click a row, a wilaya, or a moughataa</span>
+    <h2 data-i18n="trend.title"></h2>
+    <span class="note" data-i18n="trend.note"></span>
   </div>
   <div class="panel-body" id="trend-body">
-    <div class="trend-layout">
+    <div class="trend-layout" id="trend-layout">
       <div class="trend-board">
         <table id="trendTable">
           <thead><tr>
-            <th>Wilaya</th><th class="num">Start</th><th class="num">Latest</th><th class="num">Change</th><th>Last 3 dekads</th>
+            <th data-i18n="trend.col.wilaya"></th><th class="num" data-i18n="trend.col.start"></th><th class="num" data-i18n="trend.col.latest"></th><th class="num" data-i18n="trend.col.change"></th><th data-i18n="trend.col.last3"></th>
           </tr></thead>
           <tbody id="trendBody"></tbody>
         </table>
       </div>
       <div class="trend-chart-wrap">
-        <div class="trend-chart-title" id="trendChartTitle">Select a unit</div>
+        <div class="trend-chart-title" id="trendChartTitle"></div>
         <div class="trend-chart-sub" id="trendChartSub"></div>
-        <div id="scoreTrendBox"><canvas id="scoreTrendChart" height="190"></canvas></div>
-        <div class="trend-legend">Dashed lines are tier boundaries: below 1.75 severe &middot; 2.75 high &middot; 3.25 moderate-high &middot; 4.0 moderate. Lower is worse. Faint grey lines are the other wilayas, for context.</div>
+        <div id="scoreTrendBox" style="direction:ltr;"><canvas id="scoreTrendChart" height="190"></canvas></div>
+        <div class="trend-legend" data-i18n="trend.legend"></div>
       </div>
     </div>
+    <div id="trend-empty" style="display:none;padding:24px;color:var(--text-muted);font-size:12.5px;line-height:1.7;" data-i18n="trend.empty"></div>
   </div>
 </div>
 
 <div class="layout">
   <div class="panel">
     <div class="panel-head">
-      <h2>Suitability &amp; vulnerability matrix</h2>
-      <span class="note">wilaya level, real PSVI</span>
+      <h2 data-i18n="mat.title"></h2>
+      <span class="note" data-i18n="mat.note"></span>
     </div>
     <div class="panel-body pad">
-      <canvas id="matrixChart" height="230"></canvas>
+      <div id="matrixBox" style="direction:ltr;"><canvas id="matrixChart" height="230"></canvas></div>
     </div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <h2>Alert log — real output of alert_bot.py</h2>
+      <h2 data-i18n="alert.title"></h2>
       <span class="note" id="alert-count"></span>
     </div>
     <div class="panel-body">
@@ -209,85 +223,444 @@
 
 <div class="panel">
   <div class="panel-head">
-    <h2>Priority action table (wilaya level)</h2>
-    <span class="note">click a column to sort · click a row to inspect</span>
+    <h2 data-i18n="prio.title"></h2>
+    <span class="note" data-i18n="prio.note"></span>
   </div>
   <div class="panel-body">
     <table id="priorityTable">
       <thead>
         <tr>
-          <th data-key="wilaya">Wilaya</th>
-          <th data-key="real_tier">Tier</th>
-          <th data-key="real_score" class="num">Resource score</th>
-          <th data-key="psvi" class="num">PSVI</th>
-          <th data-key="tlu" class="num">TLU</th>
+          <th data-key="wilaya" data-i18n="prio.col.wilaya"></th>
+          <th data-key="real_tier" data-i18n="prio.col.tier"></th>
+          <th data-key="real_score" class="num" data-i18n="prio.col.score"></th>
+          <th data-key="psvi" class="num" data-i18n="prio.col.psvi"></th>
+          <th data-key="tlu" class="num" data-i18n="prio.col.tlu"></th>
         </tr>
       </thead>
       <tbody id="priorityBody"></tbody>
     </table>
   </div>
-  <div class="engine-note" id="engine-note"></div>
+  <div class="engine-note" id="engine-note" style="direction:ltr;"></div>
 </div>
 
 <footer>
-  <b>What this is:</b> cockpit v2 — the map is real geography (ANSADE/HDX official boundaries via Leaflet), the risk tiers, PSVI, and alerts are the actual output of <code>praps2_engine.py</code> and <code>alert_bot.py</code> run against the real HDX WFP/MODIS/CHIRPS data, not hand-entered. Click any wilaya to drill into its moughataas — try Trarza to see R'Kiz named and scored directly.<br>
-      <b>Pipeline:</b> praps2_engine.py (ingestion + VCI/PSVI calculation) → alert_bot.py (threshold diffing) → this cockpit (visualization). The same state JSON also feeds the CH-packet generator and field-tool SMS templates.<br>
-  <b>Data sources:</b> <a href="https://data.humdata.org/dataset/mrt-ndvi-subnational" target="_blank" rel="noopener">NDVI (WFP/MODIS via HDX)</a> · <a href="https://data.humdata.org/dataset/mrt-rainfall-subnational" target="_blank" rel="noopener">Rainfall (CHIRPS via HDX)</a> · <a href="https://data.humdata.org/dataset/cod-ab-mrt" target="_blank" rel="noopener">Administrative boundaries (ANSADE via HDX)</a> · <a href="https://github.com/fredkizito/praps2-mrt-cockpit" target="_blank" rel="noopener">Source code &amp; methodology (GitHub)</a>
+  <div data-i18n-html="foot.what"></div>
+  <div data-i18n-html="foot.pipe"></div>
+  <div data-i18n-html="foot.src"></div>
 </footer>
 
 <script>
 const BUNDLE = __BUNDLE_JSON__;
 
+// ================== translations ==================
+// Every visible string lives here. {placeholders} are filled by t(key, vars).
+// French and Arabic were drafted for this dashboard and should be read over by a
+// native speaker who works with these terms before wide circulation.
+const LANGS = {
+  en: {short:'EN', dir:'ltr', locale:'en'},
+  fr: {short:'FR', dir:'ltr', locale:'fr'},
+  ar: {short:'AR', dir:'rtl', locale:'en'}   // Arabic keeps Western digits, as is usual in Mauritania
+};
+
+const WN_AR = {
+  'Adrar':'أدرار', 'Assaba':'لعصابة', 'Brakna':'لبراكنة', 'Dakhlet Nouadhibou':'داخلت نواذيبو',
+  'Gorgol':'كوركول', 'Guidimakha':'كيدي ماغا', 'Hodh Chargui':'الحوض الشرقي', 'Hodh El Gharbi':'الحوض الغربي',
+  'Inchiri':'إنشيري', 'Tagant':'تكانت', 'Tiris Zemmour':'تيرس زمور', 'Trarza':'اترارزة', 'Nouakchott':'نواكشوط'
+};
+
+const MONTHS = {
+  en:['January','February','March','April','May','June','July','August','September','October','November','December'],
+  fr:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],
+  ar:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']
+};
+const NUMW = {
+  en:['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'],
+  fr:['zéro','une','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf','vingt']
+};
+
+const I18N = {
+en: {
+  'title': `AgriConnect Pastoral early warning cockpit — v2`,
+  'doctitle': `AgriConnect Pastoral Early Warning Cockpit v2`,
+  'subtitle': `Mauritania · AgriConnect · real Leaflet map on official ANSADE boundaries · wilaya-to-moughataa drill-down · fed directly by praps2_engine.py, not hand-entered`,
+  'badge.dekad': `LATEST DEKAD WITH DATA · {d}`,
+  'badge.dekadTitle': `The most recent dekad for which real NDVI/rainfall data actually exists`,
+  'badge.touched': `HDX RESOURCE LAST TOUCHED · {d}`,
+  'badge.touchedBoth': `HDX TOUCHED · NDVI {n} · RAINFALL {r}`,
+  'badge.touchedTitle': `When HDX last modified the source file - can differ from the badge above if the file was re-validated or corrected without new dekad rows being added yet`,
+  'na': `n/a`,
+  'strip.sev': `wilayas at SEVERE (real 24-yr VCI low)`,
+  'strip.hi': `wilayas at HIGH risk`,
+  'strip.alerts': `alerts this dekad ({n} critical)`,
+  'strip.cov': `moughataas covered by live NDVI/rainfall data`,
+  'dec.title': `Decision panel`,
+  'dec.note': `written automatically from the latest data`,
+  'map.title': `Real geography — click a wilaya, then a moughataa`,
+  'map.bounds': `boundaries: ANSADE/HDX COD-AB, official`,
+  'btn.back': `← back to national view`,
+  'nat': `National`,
+  'sel.unit': `Select a unit`,
+  'unit.wilaya': `Wilaya`,
+  'unit.mough': `Moughataa (admin-2)`,
+  'unit.km2': `km²`,
+  'unit.tlu': `TLU/km²`,
+  'kv.score': `Real resource score`,
+  'kv.vci': `Season-avg VCI`,
+  'kv.rain': `3-month rainfall, % normal`,
+  'kv.density': `Livestock density`,
+  'kv.psvi': `PSVI`,
+  'tier.SEVERE': `SEVERE`, 'tier.HIGH': `HIGH`, 'tier.MODERATE-HIGH': `MODERATE-HIGH`, 'tier.MODERATE': `MODERATE`,
+  'tier.FAVOURABLE': `FAVOURABLE`, 'tier.NO DATA': `NO DATA`,
+  'psvi.VERY HIGH': `VERY HIGH`, 'psvi.HIGH': `HIGH`, 'psvi.MODERATE': `MODERATE`, 'psvi.LOW': `LOW`, 'psvi.N/A': `n/a`,
+  'rec.severe': `Fast-track emergency feed/water support — at or near 24-yr historical low.`,
+  'rec.high': `Extend monitoring and pre-position feed supplementation.`,
+  'rec.psvi': `Resource status is only moderate but livestock density is exceptional — prioritise reserve-drawdown monitoring.`,
+  'rec.fav': `Best real score nationally or regionally as of the latest dekad.`,
+  'rec.default': `Regional-average conditions — maintain standard dekadal monitoring.`,
+  'nodata.flag': `Not covered by the current WFP NDVI/rainfall admin-2 series — a data-vintage gap, not a boundary gap. Parent wilaya tier is the best available fallback.`,
+  'nodata.action': `No live signal for this moughataa yet — fall back to the parent wilaya tier shown on the national map.`,
+  'chart.vci': `VCI`,
+  'chart.sevThr': `Severe threshold`,
+  'chart.score': `Real resource score`,
+  'chart.tlu': `TLU / km²`,
+  'chart.tip': `{w}: score {x}, {y} TLU/km²`,
+  'lib.fail': `{label} could not be loaded (likely blocked by a network/firewall filter). The rest of this page — status counts, alerts, and the priority table — does not depend on it and is fully populated.`,
+  'lib.map': `Map library (Leaflet)`,
+  'lib.chart': `Chart library (Chart.js)`,
+  'trend.title': `Season trend`,
+  'trend.note': `real resource score by dekad · click a row, a wilaya, or a moughataa`,
+  'trend.col.wilaya': `Wilaya`, 'trend.col.start': `Start`, 'trend.col.latest': `Latest`, 'trend.col.change': `Change`, 'trend.col.last3': `Last 3 dekads`,
+  'trend.legend': `Dashed lines are tier boundaries: below 1.75 severe · 2.75 high · 3.25 moderate-high · 4.0 moderate. Lower is worse. Faint grey lines are the other wilayas, for context.`,
+  'trend.empty': `Trend history is not available yet. It is built from saved dekad snapshots; once the pipeline has run with the backfill step, this panel fills in automatically.`,
+  'trend.none': `No history for this unit.`,
+  'trend.sub': `{a} to {b}: {x} to {y} ({c})`,
+  'trend.subRecent': ` · last 3 dekads: {t}`,
+  'trend.mough': `{code} (moughataa, {w})`,
+  'trend.parent': `{w} (wilaya)`,
+  'dir.Worsening': `Worsening`, 'dir.Improving': `Improving`, 'dir.Stable': `Stable`,
+  'mat.title': `Suitability & vulnerability matrix`,
+  'mat.note': `wilaya level, real PSVI`,
+  'alert.title': `Alert log — real output of alert_bot.py`,
+  'alert.count': `{n} alerts since the previous update`,
+  'sev.critical': `CRITICAL`, 'sev.high': `HIGH`, 'sev.medium': `MEDIUM`, 'sev.info': `INFO`,
+  'alert.dirW': `worsened`, 'alert.dirI': `improved`,
+  'alert.tier': `{u}: risk tier {dir} from {p} to {c} (score {a} -> {b})`,
+  'alert.severe': `{u} has entered SEVERE risk (score {x}) as of {d}.`,
+  'alert.psvi': `{u}: livestock-pressure vulnerability (PSVI) entered VERY HIGH ({v}) - reserve-drawdown risk.`,
+  'prio.title': `Priority action table (wilaya level)`,
+  'prio.note': `click a column to sort · click a row to inspect`,
+  'prio.col.wilaya': `Wilaya`, 'prio.col.tier': `Tier`, 'prio.col.score': `Resource score`, 'prio.col.psvi': `PSVI`, 'prio.col.tlu': `TLU`,
+  'engine': `engine content_hash={h} · generated_at={g} · {n1} admin1 units · {x}/{y} admin2 units with data`,
+  'foot.what': `<b>What this is:</b> cockpit v2 — the map is real geography (ANSADE/HDX official boundaries via Leaflet), the risk tiers, PSVI, and alerts are the actual output of <code>praps2_engine.py</code> and <code>alert_bot.py</code> run against the real HDX WFP/MODIS/CHIRPS data, not hand-entered. Click any wilaya to drill into its moughataas.`,
+  'foot.pipe': `<b>Pipeline:</b> praps2_engine.py (ingestion + VCI/PSVI calculation) → alert_bot.py (threshold diffing) → this cockpit (visualization). The same state JSON also feeds the CH-packet generator and field-tool SMS templates.`,
+  'foot.src': `<b>Data sources:</b> <a href="https://data.humdata.org/dataset/mrt-ndvi-subnational" target="_blank" rel="noopener">NDVI (WFP/MODIS via HDX)</a> · <a href="https://data.humdata.org/dataset/mrt-rainfall-subnational" target="_blank" rel="noopener">Rainfall (CHIRPS via HDX)</a> · <a href="https://data.humdata.org/dataset/cod-ab-mrt" target="_blank" rel="noopener">Administrative boundaries (ANSADE via HDX)</a> · <a href="https://github.com/fredkizito/praps2-mrt-cockpit" target="_blank" rel="noopener">Source code &amp; methodology (GitHub)</a>`,
+  // ---- decision panel ----
+  'd.none': `No wilaya is worsening over the season.`,
+  'd.all': `All {total} wilayas are worsening over the season.`,
+  'd.some': `{n} of {total} wilayas are worsening over the season.`,
+  'd.some1': `One of {total} wilayas is worsening over the season.`,
+  'd.steep': `The steepest fall is {w}, from {a} {from} to {b} {to}{now}.`,
+  'd.now': ` (now {t})`,
+  'd.press': ` {w}, the most livestock-pressured wilaya (PSVI {p}), fell from {a} {from} to {b} {to}.`,
+  'd.fromIn': `in {m}`, 'd.toIn': `by {m}`, 'd.fromOn': `on {d}`, 'd.toOn': `on {d}`,
+  'd.tick1': `{list} has ticked up over the last three dekads, but it is still below where it started.`,
+  'd.tick2': `{list} have ticked up over the last three dekads, but both are still below where they started.`,
+  'd.tickN': `{list} have ticked up over the last three dekads, but all are still below where they started.`,
+  'd.only': `{w} is the only wilaya that ended the season higher than it began.`,
+  'd.several': `{list} ended the season higher than they began.`,
+  'd.noneUp': `No wilaya ended the season higher than it began.`,
+  'd.actTag': `ACT`, 'd.watchTag': `WATCH`, 'd.checkTag': `RE-CHECK`,
+  'd.actBoth': `Prioritise emergency feed and water support in {s} (severe), then {h} (high).`,
+  'd.actSev': `Prioritise emergency feed and water support in {s} (severe).`,
+  'd.actHigh': `Prioritise emergency feed and water support in {h} (high).`,
+  'd.watch': `Monitor reserve drawdown in {l}: very high livestock pressure, and the likely destinations for displaced herds.`,
+  'd.watchDecl': `Monitor reserve drawdown in {l}: very high livestock pressure on a declining resource base, and the likely destinations for displaced herds.`,
+  'd.check1': `Re-check before committing new resources in {l}: its score is higher than at the start of the season.`,
+  'd.checkN': `Re-check before committing new resources in {l}: their scores are higher than at the start of the season.`,
+  'd.basis': `Based on {n} dekads, {a} to {b} (latest dekad with data: {d}). `,
+  'd.basisTail': `Generated by rules from the data on this page; treat it as a prompt for review, not an instruction.`,
+  'd.fb1': `One wilaya is currently at severe risk: {l}. Season trend analysis is not available yet; it appears here once the pipeline has built the dekad history.`,
+  'd.fbN': `{n} wilayas are currently at severe risk: {l}. Season trend analysis is not available yet; it appears here once the pipeline has built the dekad history.`,
+  'd.fb0': `Season trend analysis is not available yet; it appears here once the pipeline has built the dekad history.`
+},
+
+fr: {
+  'title': `Tableau de bord AgriConnect d'alerte précoce pastorale (v2)`,
+  'doctitle': `Tableau de bord AgriConnect d'alerte précoce pastorale v2`,
+  'subtitle': `Mauritanie · AgriConnect · carte Leaflet sur les limites officielles de l'ANSADE · exploration de la wilaya à la moughataa · alimenté directement par praps2_engine.py, sans saisie manuelle`,
+  'badge.dekad': `DERNIÈRE DÉCADE AVEC DONNÉES · {d}`,
+  'badge.dekadTitle': `La décade la plus récente pour laquelle des données NDVI/pluviométrie réelles existent`,
+  'badge.touched': `RESSOURCE HDX MODIFIÉE LE · {d}`,
+  'badge.touchedBoth': `HDX MODIFIÉ · NDVI {n} · PLUVIOMÉTRIE {r}`,
+  'badge.touchedTitle': `Date de la dernière modification du fichier source par HDX : peut différer du badge ci-dessus si le fichier a été revalidé ou corrigé sans que de nouvelles décades aient encore été ajoutées`,
+  'na': `n.d.`,
+  'strip.sev': `wilayas en état SÉVÈRE (minimum réel du VCI sur 24 ans)`,
+  'strip.hi': `wilayas à risque ÉLEVÉ`,
+  'strip.alerts': `alertes cette décade ({n} critiques)`,
+  'strip.cov': `moughataas couvertes par les données NDVI/pluviométrie en direct`,
+  'dec.title': `Panneau de décision`,
+  'dec.note': `rédigé automatiquement à partir des dernières données`,
+  'map.title': `Géographie réelle : cliquez sur une wilaya, puis sur une moughataa`,
+  'map.bounds': `limites : ANSADE/HDX COD-AB, officielles`,
+  'btn.back': `← retour à la vue nationale`,
+  'nat': `National`,
+  'sel.unit': `Sélectionnez une unité`,
+  'unit.wilaya': `Wilaya`,
+  'unit.mough': `Moughataa (admin-2)`,
+  'unit.km2': `km²`,
+  'unit.tlu': `UBT/km²`,
+  'kv.score': `Score réel des ressources`,
+  'kv.vci': `VCI moyen de la saison`,
+  'kv.rain': `Pluviométrie sur 3 mois, % de la normale`,
+  'kv.density': `Densité du bétail`,
+  'kv.psvi': `PSVI`,
+  'tier.SEVERE': `SÉVÈRE`, 'tier.HIGH': `ÉLEVÉ`, 'tier.MODERATE-HIGH': `MODÉRÉ À ÉLEVÉ`, 'tier.MODERATE': `MODÉRÉ`,
+  'tier.FAVOURABLE': `FAVORABLE`, 'tier.NO DATA': `PAS DE DONNÉES`,
+  'psvi.VERY HIGH': `TRÈS ÉLEVÉ`, 'psvi.HIGH': `ÉLEVÉ`, 'psvi.MODERATE': `MODÉRÉ`, 'psvi.LOW': `FAIBLE`, 'psvi.N/A': `n.d.`,
+  'rec.severe': `Accélérer l'appui d'urgence en aliments du bétail et en eau : niveau historique le plus bas sur 24 ans, ou proche.`,
+  'rec.high': `Renforcer le suivi et pré-positionner les compléments alimentaires.`,
+  'rec.psvi': `L'état des ressources n'est que modéré mais la densité du bétail est exceptionnelle : prioriser le suivi de l'épuisement des réserves.`,
+  'rec.fav': `Meilleur score réel au niveau national ou régional à la dernière décade.`,
+  'rec.default': `Conditions proches de la moyenne régionale : maintenir le suivi décadaire habituel.`,
+  'nodata.flag': `Non couverte par la série NDVI/pluviométrie du PAM disponible au niveau admin-2 : un décalage dans la mise à jour des données, non un problème de limites. Le niveau de la wilaya parente est la meilleure solution de repli.`,
+  'nodata.action': `Pas encore de signal en direct pour cette moughataa : se rabattre sur le niveau de la wilaya parente affiché sur la carte nationale.`,
+  'chart.vci': `VCI`,
+  'chart.sevThr': `Seuil sévère`,
+  'chart.score': `Score réel des ressources`,
+  'chart.tlu': `UBT / km²`,
+  'chart.tip': `{w} : score {x}, {y} UBT/km²`,
+  'lib.fail': `{label} n'a pas pu être chargée (probablement bloquée par un filtre réseau/pare-feu). Le reste de cette page (compteurs, alertes et tableau des priorités) n'en dépend pas et reste entièrement renseigné.`,
+  'lib.map': `La bibliothèque cartographique (Leaflet)`,
+  'lib.chart': `La bibliothèque de graphiques (Chart.js)`,
+  'trend.title': `Tendance de la saison`,
+  'trend.note': `score réel des ressources par décade · cliquez sur une ligne, une wilaya ou une moughataa`,
+  'trend.col.wilaya': `Wilaya`, 'trend.col.start': `Début`, 'trend.col.latest': `Dernier`, 'trend.col.change': `Variation`, 'trend.col.last3': `3 dernières décades`,
+  'trend.legend': `Les lignes pointillées marquent les seuils de niveau : sous 1,75 sévère · 2,75 élevé · 3,25 modéré à élevé · 4,0 modéré. Plus la valeur est basse, pire est la situation. Les lignes grises pâles représentent les autres wilayas, pour le contexte.`,
+  'trend.empty': `L'historique des tendances n'est pas encore disponible. Il est construit à partir des instantanés de décades enregistrés ; une fois le pipeline exécuté avec l'étape de rattrapage, ce panneau se remplit automatiquement.`,
+  'trend.none': `Aucun historique pour cette unité.`,
+  'trend.sub': `{a} à {b} : {x} à {y} ({c})`,
+  'trend.subRecent': ` · 3 dernières décades : {t}`,
+  'trend.mough': `{code} (moughataa, {w})`,
+  'trend.parent': `{w} (wilaya)`,
+  'dir.Worsening': `Dégradation`, 'dir.Improving': `Amélioration`, 'dir.Stable': `Stable`,
+  'mat.title': `Matrice d'aptitude et de vulnérabilité`,
+  'mat.note': `niveau wilaya, PSVI réel`,
+  'alert.title': `Journal d'alertes : sortie réelle de alert_bot.py`,
+  'alert.count': `{n} alertes depuis la mise à jour précédente`,
+  'sev.critical': `CRITIQUE`, 'sev.high': `ÉLEVÉ`, 'sev.medium': `MOYEN`, 'sev.info': `INFO`,
+  'alert.dirW': `dégradé`, 'alert.dirI': `amélioré`,
+  'alert.tier': `{u} : niveau de risque {dir}, de {p} à {c} (score {a} → {b})`,
+  'alert.severe': `{u} est entrée en risque SÉVÈRE (score {x}) au {d}.`,
+  'alert.psvi': `{u} : la vulnérabilité liée à la pression du bétail (PSVI) est passée à TRÈS ÉLEVÉE ({v}) : risque d'épuisement des réserves.`,
+  'prio.title': `Tableau des actions prioritaires (niveau wilaya)`,
+  'prio.note': `cliquez sur une colonne pour trier · cliquez sur une ligne pour examiner`,
+  'prio.col.wilaya': `Wilaya`, 'prio.col.tier': `Niveau`, 'prio.col.score': `Score des ressources`, 'prio.col.psvi': `PSVI`, 'prio.col.tlu': `UBT`,
+  'engine': `moteur content_hash={h} · generated_at={g} · {n1} unités admin1 · {x}/{y} unités admin2 avec données`,
+  'foot.what': `<b>De quoi s'agit-il :</b> tableau de bord v2 : la carte repose sur une géographie réelle (limites officielles ANSADE/HDX via Leaflet) ; les niveaux de risque, le PSVI et les alertes sont les résultats réels de <code>praps2_engine.py</code> et <code>alert_bot.py</code> appliqués aux données réelles HDX PAM/MODIS/CHIRPS, sans saisie manuelle. Cliquez sur une wilaya pour explorer ses moughataas.`,
+  'foot.pipe': `<b>Chaîne de traitement :</b> praps2_engine.py (ingestion + calcul VCI/PSVI) → alert_bot.py (comparaison des seuils) → ce tableau de bord (visualisation). Le même fichier d'état alimente aussi le générateur de dossier CH et les modèles de SMS de l'outil de terrain.`,
+  'foot.src': `<b>Sources des données :</b> <a href="https://data.humdata.org/dataset/mrt-ndvi-subnational" target="_blank" rel="noopener">NDVI (PAM/MODIS via HDX)</a> · <a href="https://data.humdata.org/dataset/mrt-rainfall-subnational" target="_blank" rel="noopener">Pluviométrie (CHIRPS via HDX)</a> · <a href="https://data.humdata.org/dataset/cod-ab-mrt" target="_blank" rel="noopener">Limites administratives (ANSADE via HDX)</a> · <a href="https://github.com/fredkizito/praps2-mrt-cockpit" target="_blank" rel="noopener">Code source et méthodologie (GitHub)</a>`,
+  'd.none': `Aucune wilaya ne se dégrade au cours de la saison.`,
+  'd.all': `Les {total} wilayas se dégradent au cours de la saison.`,
+  'd.some': `{n} wilayas sur {total} se dégradent au cours de la saison.`,
+  'd.some1': `Une wilaya sur {total} se dégrade au cours de la saison.`,
+  'd.steep': `La baisse la plus marquée est celle de {w}, de {a} {from} à {b} {to}{now}.`,
+  'd.now': ` (désormais {t})`,
+  'd.press': ` {w}, la wilaya la plus exposée à la pression du bétail (PSVI {p}), est passée de {a} {from} à {b} {to}.`,
+  'd.fromIn': `en {m}`, 'd.toIn': `en {m}`, 'd.fromOn': `le {d}`, 'd.toOn': `le {d}`,
+  'd.tick1': `{list} a légèrement remonté au cours des trois dernières décades, mais reste en dessous de son niveau de départ.`,
+  'd.tick2': `{list} ont légèrement remonté au cours des trois dernières décades, mais restent toutes deux en dessous de leur niveau de départ.`,
+  'd.tickN': `{list} ont légèrement remonté au cours des trois dernières décades, mais restent toutes en dessous de leur niveau de départ.`,
+  'd.only': `{w} est la seule wilaya à terminer la saison plus haut qu'elle n'a commencé.`,
+  'd.several': `{list} terminent la saison plus haut qu'elles n'ont commencé.`,
+  'd.noneUp': `Aucune wilaya ne termine la saison plus haut qu'elle n'a commencé.`,
+  'd.actTag': `AGIR`, 'd.watchTag': `SURVEILLER`, 'd.checkTag': `VÉRIFIER`,
+  'd.actBoth': `Donner la priorité à l'appui d'urgence en aliments du bétail et en eau dans {s} (sévère), puis {h} (élevé).`,
+  'd.actSev': `Donner la priorité à l'appui d'urgence en aliments du bétail et en eau dans {s} (sévère).`,
+  'd.actHigh': `Donner la priorité à l'appui d'urgence en aliments du bétail et en eau dans {h} (élevé).`,
+  'd.watch': `Surveiller l'épuisement des réserves dans {l} : pression très élevée du bétail, et destinations probables des troupeaux déplacés.`,
+  'd.watchDecl': `Surveiller l'épuisement des réserves dans {l} : pression très élevée du bétail sur une base de ressources en déclin, et destinations probables des troupeaux déplacés.`,
+  'd.check1': `Vérifier avant d'engager de nouvelles ressources dans {l} : son score est supérieur à celui du début de saison.`,
+  'd.checkN': `Vérifier avant d'engager de nouvelles ressources dans {l} : leurs scores sont supérieurs à ceux du début de saison.`,
+  'd.basis': `Basé sur {n} décades, du {a} au {b} (dernière décade avec données : {d}). `,
+  'd.basisTail': `Généré par des règles à partir des données de cette page ; à considérer comme une invitation à vérifier, non comme une instruction.`,
+  'd.fb1': `Une wilaya est actuellement en risque sévère : {l}. L'analyse de tendance de la saison n'est pas encore disponible ; elle apparaît ici dès que le pipeline a construit l'historique des décades.`,
+  'd.fbN': `{n} wilayas sont actuellement en risque sévère : {l}. L'analyse de tendance de la saison n'est pas encore disponible ; elle apparaît ici dès que le pipeline a construit l'historique des décades.`,
+  'd.fb0': `L'analyse de tendance de la saison n'est pas encore disponible ; elle apparaît ici dès que le pipeline a construit l'historique des décades.`
+},
+
+ar: {
+  'title': `لوحة AgriConnect للإنذار المبكر الرعوي (الإصدار 2)`,
+  'doctitle': `لوحة AgriConnect للإنذار المبكر الرعوي - الإصدار 2`,
+  'subtitle': `موريتانيا · AgriConnect · خريطة Leaflet على الحدود الرسمية للوكالة الوطنية للإحصاء والتحليل الديمغرافي والاقتصادي (ANSADE) · التعمق من الولاية إلى المقاطعة · تُغذّى مباشرة من praps2_engine.py دون إدخال يدوي`,
+  'badge.dekad': `آخر عشرية بها بيانات · {d}`,
+  'badge.dekadTitle': `أحدث عشرية تتوفر لها بيانات فعلية عن NDVI والأمطار`,
+  'badge.touched': `آخر تعديل لمورد HDX · {d}`,
+  'badge.touchedBoth': `تعديل HDX · NDVI {n} · الأمطار {r}`,
+  'badge.touchedTitle': `تاريخ آخر تعديل أجرته HDX على الملف المصدر: قد يختلف عن الشارة أعلاه إذا أُعيد التحقق من الملف أو صُحّح دون إضافة عشريات جديدة بعد`,
+  'na': `غ/م`,
+  'strip.sev': `ولايات في وضع شديد (أدنى مستوى فعلي لمؤشر VCI خلال 24 عامًا)`,
+  'strip.hi': `ولايات ذات خطر مرتفع`,
+  'strip.alerts': `تنبيهات هذه العشرية (الحرجة منها: {n})`,
+  'strip.cov': `مقاطعات مشمولة ببيانات NDVI والأمطار الحية`,
+  'dec.title': `لوحة القرار`,
+  'dec.note': `تُكتب تلقائيًا من أحدث البيانات`,
+  'map.title': `الجغرافيا الفعلية: انقر على ولاية ثم على مقاطعة`,
+  'map.bounds': `الحدود: ANSADE/HDX COD-AB (رسمية)`,
+  'btn.back': `→ العودة إلى العرض الوطني`,
+  'nat': `وطني`,
+  'sel.unit': `اختر وحدة`,
+  'unit.wilaya': `ولاية`,
+  'unit.mough': `مقاطعة (المستوى الإداري 2)`,
+  'unit.km2': `كم²`,
+  'unit.tlu': `TLU/كم²`,
+  'kv.score': `درجة الموارد الفعلية`,
+  'kv.vci': `متوسط VCI للموسم`,
+  'kv.rain': `أمطار 3 أشهر، % من المعدل`,
+  'kv.density': `كثافة الثروة الحيوانية`,
+  'kv.psvi': `PSVI`,
+  'tier.SEVERE': `شديد`, 'tier.HIGH': `مرتفع`, 'tier.MODERATE-HIGH': `متوسط إلى مرتفع`, 'tier.MODERATE': `متوسط`,
+  'tier.FAVOURABLE': `ملائم`, 'tier.NO DATA': `لا توجد بيانات`,
+  'psvi.VERY HIGH': `مرتفع جدًا`, 'psvi.HIGH': `مرتفع`, 'psvi.MODERATE': `متوسط`, 'psvi.LOW': `منخفض`, 'psvi.N/A': `غ/م`,
+  'rec.severe': `التعجيل بالدعم الطارئ بالأعلاف والمياه: عند أدنى مستوى تاريخي خلال 24 عامًا أو قريب منه.`,
+  'rec.high': `تعزيز المتابعة والتخزين المسبق لمكملات الأعلاف.`,
+  'rec.psvi': `وضع الموارد متوسط فقط لكن كثافة الثروة الحيوانية استثنائية: إعطاء الأولوية لمراقبة استنزاف المخزونات.`,
+  'rec.fav': `أفضل درجة فعلية وطنيًا أو إقليميًا في آخر عشرية.`,
+  'rec.default': `أوضاع قريبة من المتوسط الإقليمي: مواصلة المتابعة العشرية المعتادة.`,
+  'nodata.flag': `غير مشمولة بسلسلة NDVI والأمطار الحالية لبرنامج الأغذية العالمي على المستوى الإداري 2: فجوة في تحديث البيانات وليست في الحدود. تصنيف الولاية الأم هو أفضل بديل متاح.`,
+  'nodata.action': `لا توجد إشارة حية لهذه المقاطعة بعد: يُعتمد تصنيف الولاية الأم المعروض على الخريطة الوطنية.`,
+  'chart.vci': `VCI`,
+  'chart.sevThr': `عتبة الشدة`,
+  'chart.score': `درجة الموارد الفعلية`,
+  'chart.tlu': `TLU / كم²`,
+  'chart.tip': `{w}: الدرجة {x}، {y} TLU/كم²`,
+  'lib.fail': `تعذّر تحميل {label} (ربما بسبب حجب من مرشّح الشبكة أو جدار الحماية). بقية هذه الصفحة (العدادات والتنبيهات وجدول الأولويات) لا تعتمد عليها وهي معروضة بالكامل.`,
+  'lib.map': `مكتبة الخرائط (Leaflet)`,
+  'lib.chart': `مكتبة الرسوم البيانية (Chart.js)`,
+  'trend.title': `اتجاه الموسم`,
+  'trend.note': `درجة الموارد الفعلية لكل عشرية · انقر على صف أو ولاية أو مقاطعة`,
+  'trend.col.wilaya': `الولاية`, 'trend.col.start': `البداية`, 'trend.col.latest': `الأحدث`, 'trend.col.change': `التغير`, 'trend.col.last3': `آخر 3 عشريات`,
+  'trend.legend': `الخطوط المتقطعة تمثل حدود المستويات: أقل من 1.75 شديد · 2.75 مرتفع · 3.25 متوسط إلى مرتفع · 4.0 متوسط. كلما انخفضت القيمة ساء الوضع. الخطوط الرمادية الباهتة هي الولايات الأخرى للمقارنة.`,
+  'trend.empty': `سجل الاتجاهات غير متاح بعد. يُبنى من لقطات العشريات المحفوظة؛ وبمجرد تشغيل خط المعالجة مع خطوة الاستكمال، تمتلئ هذه اللوحة تلقائيًا.`,
+  'trend.none': `لا يوجد سجل لهذه الوحدة.`,
+  'trend.sub': `من {a} إلى {b}: من {x} إلى {y} ({c})`,
+  'trend.subRecent': ` · آخر 3 عشريات: {t}`,
+  'trend.mough': `{code} (مقاطعة، {w})`,
+  'trend.parent': `{w} (ولاية)`,
+  'dir.Worsening': `تدهور`, 'dir.Improving': `تحسّن`, 'dir.Stable': `مستقر`,
+  'mat.title': `مصفوفة الملاءمة والهشاشة`,
+  'mat.note': `على مستوى الولاية، PSVI الفعلي`,
+  'alert.title': `سجل التنبيهات: المخرجات الفعلية لـ alert_bot.py`,
+  'alert.count': `عدد التنبيهات منذ التحديث السابق: {n}`,
+  'sev.critical': `حرج`, 'sev.high': `مرتفع`, 'sev.medium': `متوسط`, 'sev.info': `معلومة`,
+  'alert.dirW': `تدهور`, 'alert.dirI': `تحسّن`,
+  'alert.tier': `{u}: {dir} مستوى الخطر من {p} إلى {c} (الدرجة من {a} إلى {b})`,
+  'alert.severe': `{u} دخلت مستوى الخطر الشديد (الدرجة {x}) بتاريخ {d}.`,
+  'alert.psvi': `{u}: ارتفعت هشاشة ضغط الثروة الحيوانية (PSVI) إلى مستوى مرتفع جدًا ({v}): خطر استنزاف المخزونات.`,
+  'prio.title': `جدول الإجراءات ذات الأولوية (على مستوى الولاية)`,
+  'prio.note': `انقر على عمود للفرز · انقر على صف للاطلاع`,
+  'prio.col.wilaya': `الولاية`, 'prio.col.tier': `المستوى`, 'prio.col.score': `درجة الموارد`, 'prio.col.psvi': `PSVI`, 'prio.col.tlu': `TLU`,
+  'engine': `المحرك content_hash={h} · generated_at={g} · {n1} وحدات من المستوى 1 · {x}/{y} وحدات من المستوى 2 بها بيانات`,
+  'foot.what': `<b>ما هذه اللوحة:</b> اللوحة (الإصدار 2): الخريطة جغرافيا فعلية (الحدود الرسمية ANSADE/HDX عبر Leaflet)، ومستويات الخطر وPSVI والتنبيهات هي المخرجات الفعلية لـ <code>praps2_engine.py</code> و<code>alert_bot.py</code> المطبّقين على بيانات HDX الفعلية (برنامج الأغذية العالمي/MODIS/CHIRPS) دون إدخال يدوي. انقر على أي ولاية للتعمق في مقاطعاتها.`,
+  'foot.pipe': `<b>مسار المعالجة:</b> praps2_engine.py (الاستيعاب + حساب VCI/PSVI) ← alert_bot.py (مقارنة العتبات) ← هذه اللوحة (العرض). يغذّي ملف الحالة نفسه أيضًا مولّد ملف الإطار المنسّق CH وقوالب الرسائل النصية لأداة الميدان.`,
+  'foot.src': `<b>مصادر البيانات:</b> <a href="https://data.humdata.org/dataset/mrt-ndvi-subnational" target="_blank" rel="noopener">NDVI (برنامج الأغذية العالمي/MODIS عبر HDX)</a> · <a href="https://data.humdata.org/dataset/mrt-rainfall-subnational" target="_blank" rel="noopener">الأمطار (CHIRPS عبر HDX)</a> · <a href="https://data.humdata.org/dataset/cod-ab-mrt" target="_blank" rel="noopener">الحدود الإدارية (ANSADE عبر HDX)</a> · <a href="https://github.com/fredkizito/praps2-mrt-cockpit" target="_blank" rel="noopener">الشيفرة المصدرية والمنهجية (GitHub)</a>`,
+  'd.none': `لا توجد ولاية تتدهور خلال الموسم.`,
+  'd.all': `جميع الولايات ({total}) تتدهور خلال الموسم.`,
+  'd.some': `{nWil} من أصل {total} تتدهور خلال الموسم.`,
+  'd.some1': `{nWil} من أصل {total} تتدهور خلال الموسم.`,
+  'd.steep': `أشد انخفاض سُجّل في {w}، من {a} {from} إلى {b} {to}{now}.`,
+  'd.now': ` (وضعها الآن {t})`,
+  'd.press': ` {w}، وهي الولاية الأكثر تعرضًا لضغط الثروة الحيوانية (PSVI {p})، تراجعت من {a} {from} إلى {b} {to}.`,
+  'd.fromIn': `في {m}`, 'd.toIn': `في {m}`, 'd.fromOn': `بتاريخ {d}`, 'd.toOn': `بتاريخ {d}`,
+  'd.tick1': `{list} ارتفعت قليلًا خلال العشريات الثلاث الأخيرة، لكنها لا تزال أدنى من مستوى بداية الموسم.`,
+  'd.tick2': `{list} ارتفعتا قليلًا خلال العشريات الثلاث الأخيرة، لكنهما لا تزالان أدنى من مستوى بداية الموسم.`,
+  'd.tickN': `{list} ارتفعت قليلًا خلال العشريات الثلاث الأخيرة، لكنها جميعًا لا تزال أدنى من مستوى بداية الموسم.`,
+  'd.only': `{w} هي الولاية الوحيدة التي أنهت الموسم أعلى مما بدأته.`,
+  'd.several': `{list} أنهت الموسم أعلى مما بدأته.`,
+  'd.noneUp': `لم تنهِ أي ولاية الموسم أعلى مما بدأته.`,
+  'd.actTag': `تحرّك`, 'd.watchTag': `راقب`, 'd.checkTag': `تحقق`,
+  'd.actBoth': `إعطاء الأولوية للدعم الطارئ بالأعلاف والمياه في {s} (شديد)، ثم {h} (مرتفع).`,
+  'd.actSev': `إعطاء الأولوية للدعم الطارئ بالأعلاف والمياه في {s} (شديد).`,
+  'd.actHigh': `إعطاء الأولوية للدعم الطارئ بالأعلاف والمياه في {h} (مرتفع).`,
+  'd.watch': `مراقبة استنزاف المخزونات في {l}: ضغط مرتفع جدًا من الثروة الحيوانية، وهي الوجهات المحتملة للقطعان النازحة.`,
+  'd.watchDecl': `مراقبة استنزاف المخزونات في {l}: ضغط مرتفع جدًا من الثروة الحيوانية على قاعدة موارد متراجعة، وهي الوجهات المحتملة للقطعان النازحة.`,
+  'd.check1': `التحقق قبل تخصيص موارد جديدة في {l}: درجتها أعلى من درجة بداية الموسم.`,
+  'd.checkN': `التحقق قبل تخصيص موارد جديدة في {l}: درجاتها أعلى من درجات بداية الموسم.`,
+  'd.basis': `استنادًا إلى {n} عشريات، من {a} إلى {b} (آخر عشرية بها بيانات: {d}). `,
+  'd.basisTail': `أُنشئ بقواعد آلية من بيانات هذه الصفحة؛ يُعدّ تنبيهًا للمراجعة وليس تعليمات.`,
+  'd.fb1': `هناك ولاية واحدة في وضع الخطر الشديد حاليًا: {l}. تحليل اتجاه الموسم غير متاح بعد؛ سيظهر هنا بمجرد أن يبني خط المعالجة سجل العشريات.`,
+  'd.fbN': `هناك {nWil} في وضع الخطر الشديد حاليًا: {l}. تحليل اتجاه الموسم غير متاح بعد؛ سيظهر هنا بمجرد أن يبني خط المعالجة سجل العشريات.`,
+  'd.fb0': `تحليل اتجاه الموسم غير متاح بعد؛ سيظهر هنا بمجرد أن يبني خط المعالجة سجل العشريات.`
+}
+};
+
+// ================== language engine ==================
+let LANG = 'en';
+function t(key, v){
+  let s = (I18N[LANG] && I18N[LANG][key] !== undefined) ? I18N[LANG][key]
+        : (I18N.en[key] !== undefined ? I18N.en[key] : key);
+  if(v) s = s.replace(/\{(\w+)\}/g, (m, k) => (v[k] !== undefined ? v[k] : m));
+  return s;
+}
+const isRTL = () => LANGS[LANG].dir === 'rtl';
+const wn = name => (LANG === 'ar' && WN_AR[name]) ? WN_AR[name] : name;
+const tierName = c => t('tier.' + c);
+const lc = s => LANG === 'ar' ? s : s.toLowerCase();
+function fx(v, d){
+  if(v === null || v === undefined || Number.isNaN(Number(v))) return '—';
+  const s = Number(v).toFixed(d);
+  return LANG === 'fr' ? s.replace('.', ',') : s;
+}
+const fxs = s => LANG === 'fr' ? String(s).replace('.', ',') : String(s);   // for numbers already formatted as text
+function fmtNum(n){ return (n === null || n === undefined) ? '—' : Number(n).toLocaleString(LANGS[LANG].locale); }
+function initialLang(){
+  try { const q = new URLSearchParams(location.search).get('lang'); if(q && LANGS[q]) return q; } catch(e) {}
+  try { const s = localStorage.getItem('agriconnect_lang'); if(s && LANGS[s]) return s; } catch(e) {}
+  return 'en';
+}
+function setLang(l){
+  if(!LANGS[l]) return;
+  LANG = l;
+  try { localStorage.setItem('agriconnect_lang', l); } catch(e) {}
+  applyLang();
+}
+function applyStatic(){
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANGS[LANG].dir;
+  document.title = t('doctitle');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    const on = b.dataset.lang === LANG;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+
+// ================== data helpers ==================
 const TIER_COLOR = {
   'SEVERE':'#C0463B','HIGH':'#D98B3F','MODERATE-HIGH':'#D9A34A','MODERATE':'#D9BC55',
-  'FAVOURABLE':'#6B9C5C','NO DATA':'#4A5257', undefined:'#4A5257', null:'#4A5257'
+  'FAVOURABLE':'#6B9C5C','NO DATA':'#4A5257'
 };
-function tierColor(t){ return TIER_COLOR[t] || '#4A5257'; }
-function fmtNum(n){ return (n===null||n===undefined) ? '—' : Number(n).toLocaleString(); }
+function tierColor(x){ return TIER_COLOR[x] || '#4A5257'; }
+function tierPill(tier){
+  const dark = (tier === 'MODERATE' || tier === 'MODERATE-HIGH');
+  return `<span class="tier-pill" style="background:${tierColor(tier)};color:${dark ? '#241a05' : '#fff'}">${tierName(tier || 'NO DATA')}</span>`;
+}
 
 const admin1ByName = {};
 BUNDLE.state.admin1.forEach(d => admin1ByName[d.wilaya] = d);
 const admin2ByPcode = {};
 BUNDLE.state.admin2.forEach(d => admin2ByPcode[d.PCODE] = d);
+const HIST = BUNDLE.history;
 
-document.getElementById('dekad-badge').textContent = 'LATEST DEKAD WITH DATA · ' + BUNDLE.state.as_of;
+let map = null, mapFailed = false;
+let admin1Layer, admin2Layer, currentWilaya = null;
+let trendChart = null, scoreChart = null, matrixChart = null;
+let sel = {kind:'w', key:'Adrar'};
+let sortKey = 'real_score', sortAsc = true;
 
-if (BUNDLE.fetch_manifest) {
-  const fm = BUNDLE.fetch_manifest;
-  const ndviLM = fm.ndvi && fm.ndvi.last_modified ? fm.ndvi.last_modified.slice(0, 10) : null;
-  const rainLM = fm.rainfall && fm.rainfall.last_modified ? fm.rainfall.last_modified.slice(0, 10) : null;
-  let label = null;
-  if (ndviLM && rainLM && ndviLM === rainLM) {
-    label = `HDX RESOURCE LAST TOUCHED · ${ndviLM}`;
-  } else if (ndviLM || rainLM) {
-    label = `HDX TOUCHED · NDVI ${ndviLM || 'n/a'} · RAINFALL ${rainLM || 'n/a'}`;
-  }
-  if (label) {
-    const el = document.getElementById('resource-touched-badge');
-    el.textContent = label;
-    el.style.display = 'inline-block';
-  }
-}
-document.getElementById('engine-note').textContent =
-  `engine content_hash=${BUNDLE.state.content_hash} · generated_at=${BUNDLE.state.generated_at} · ` +
-  `${BUNDLE.state.n_admin1} admin1 units · ${BUNDLE.state.n_admin2_with_data}/${BUNDLE.state.n_admin2_total} admin2 units with data`;
-
-// ---- status strip ----
-const nSevere = BUNDLE.state.admin1.filter(d=>d.real_tier==='SEVERE').length;
-const nHigh = BUNDLE.state.admin1.filter(d=>d.real_tier==='HIGH').length;
-const nAlerts = BUNDLE.alerts.length;
-const nCritical = BUNDLE.alerts.filter(a=>a.severity==='critical').length;
-document.getElementById('strip').innerHTML = `
-  <div class="stat sev"><div class="num">${nSevere}</div><div class="lbl">wilayas at SEVERE (real 24-yr VCI low)</div></div>
-  <div class="stat hi"><div class="num">${nHigh}</div><div class="lbl">wilayas at HIGH risk</div></div>
-  <div class="stat acc"><div class="num">${nAlerts}</div><div class="lbl">alerts this dekad (${nCritical} critical)</div></div>
-  <div class="stat fav"><div class="num">${BUNDLE.state.n_admin2_with_data}/${BUNDLE.state.n_admin2_total}</div><div class="lbl">moughataas covered by live NDVI/rainfall data</div></div>
-`;
-
-// ---- resilience: wait for a CDN global (a fallback script tag was already
-// ---- attempted via onerror in <head> if the primary CDN failed) before
-// ---- using it; degrade gracefully with a visible message if it never
-// ---- arrives, instead of leaving the section silently blank. ----
+// ================== resilience helpers ==================
 function waitForGlobal(name, timeoutMs, onReady, onTimeout) {
   const start = Date.now();
   (function poll() {
@@ -296,23 +669,52 @@ function waitForGlobal(name, timeoutMs, onReady, onTimeout) {
     setTimeout(poll, 150);
   })();
 }
-function libFailureNotice(label) {
-  return `<div style="padding:24px;color:var(--text-muted);font-size:12.5px;line-height:1.7;text-align:center;">
-    ${label} could not be loaded (likely blocked by a network/firewall filter). The rest of this page —
-    status counts, alerts, and the priority table — does not depend on it and is fully populated.
-  </div>`;
+function libFailureNotice(labelKey) {
+  return `<div style="padding:24px;color:var(--text-muted);font-size:12.5px;line-height:1.7;text-align:center;">${t('lib.fail', {label: t(labelKey)})}</div>`;
 }
 
-// ---- map ----
-let map = null;
-function styleFeature(tier){
-  return {fillColor: tierColor(tier), weight:1, color:'#12181B', fillOpacity:0.85};
+// ================== header, strip, engine note ==================
+function renderHeader(){
+  document.getElementById('dekad-badge').textContent = t('badge.dekad', {d: BUNDLE.state.as_of});
+  const el = document.getElementById('resource-touched-badge');
+  el.style.display = 'none';
+  if (BUNDLE.fetch_manifest) {
+    const fm = BUNDLE.fetch_manifest;
+    const ndviLM = fm.ndvi && fm.ndvi.last_modified ? fm.ndvi.last_modified.slice(0, 10) : null;
+    const rainLM = fm.rainfall && fm.rainfall.last_modified ? fm.rainfall.last_modified.slice(0, 10) : null;
+    let label = null;
+    if (ndviLM && rainLM && ndviLM === rainLM) label = t('badge.touched', {d: ndviLM});
+    else if (ndviLM || rainLM) label = t('badge.touchedBoth', {n: ndviLM || t('na'), r: rainLM || t('na')});
+    if (label) { el.textContent = label; el.style.display = 'inline-block'; }
+  }
 }
-let admin1Layer, admin2Layer, currentWilaya = null;
+function renderEngineNote(){
+  document.getElementById('engine-note').textContent = t('engine', {
+    h: BUNDLE.state.content_hash, g: BUNDLE.state.generated_at, n1: BUNDLE.state.n_admin1,
+    x: BUNDLE.state.n_admin2_with_data, y: BUNDLE.state.n_admin2_total});
+}
+function renderStrip(){
+  const nSevere = BUNDLE.state.admin1.filter(d => d.real_tier === 'SEVERE').length;
+  const nHigh = BUNDLE.state.admin1.filter(d => d.real_tier === 'HIGH').length;
+  const nAlerts = BUNDLE.alerts.length;
+  const nCritical = BUNDLE.alerts.filter(a => a.severity === 'critical').length;
+  document.getElementById('strip').innerHTML = `
+    <div class="stat sev"><div class="num">${nSevere}</div><div class="lbl">${t('strip.sev')}</div></div>
+    <div class="stat hi"><div class="num">${nHigh}</div><div class="lbl">${t('strip.hi')}</div></div>
+    <div class="stat acc"><div class="num">${nAlerts}</div><div class="lbl">${t('strip.alerts', {n: nCritical})}</div></div>
+    <div class="stat fav"><div class="num">${BUNDLE.state.n_admin2_with_data}/${BUNDLE.state.n_admin2_total}</div><div class="lbl">${t('strip.cov')}</div></div>`;
+}
 
+// ================== map ==================
+function styleFeature(tier){ return {fillColor: tierColor(tier), weight:1, color:'#12181B', fillOpacity:0.85}; }
+function renderBreadcrumb(){
+  const arrow = isRTL() ? '&larr;' : '&rarr;';
+  document.getElementById('breadcrumb').innerHTML = currentWilaya
+    ? `${t('nat')} ${arrow} <b>${wn(currentWilaya)}</b>` : `<b>${t('nat')}</b>`;
+}
 function showAdmin1(){
   if(!map) return;
-  if(admin2Layer){ map.removeLayer(admin2Layer); admin2Layer=null; }
+  if(admin2Layer){ map.removeLayer(admin2Layer); admin2Layer = null; }
   if(admin1Layer) map.removeLayer(admin1Layer);
   admin1Layer = L.geoJSON(BUNDLE.admin1_geo, {
     style: f => styleFeature(f.properties.real_tier),
@@ -324,13 +726,12 @@ function showAdmin1(){
   }).addTo(map);
   map.fitBounds(admin1Layer.getBounds(), {padding:[10,10]});
   document.getElementById('back-btn').style.display = 'none';
-  document.getElementById('breadcrumb').innerHTML = '<b>National</b>';
   currentWilaya = null;
+  renderBreadcrumb();
 }
-
 function showAdmin2(wilayaName){
   if(!map) return;
-  if(admin1Layer){ map.removeLayer(admin1Layer); admin1Layer=null; }
+  if(admin1Layer){ map.removeLayer(admin1Layer); admin1Layer = null; }
   if(admin2Layer) map.removeLayer(admin2Layer);
   const feats = BUNDLE.admin2_geo.features.filter(f => f.properties.wilaya === wilayaName);
   admin2Layer = L.geoJSON({type:'FeatureCollection', features:feats}, {
@@ -343,202 +744,186 @@ function showAdmin2(wilayaName){
   }).addTo(map);
   if(feats.length) map.fitBounds(admin2Layer.getBounds(), {padding:[20,20]});
   document.getElementById('back-btn').style.display = 'inline-block';
-  document.getElementById('breadcrumb').innerHTML = `National &rarr; <b>${wilayaName}</b>`;
   currentWilaya = wilayaName;
+  renderBreadcrumb();
 }
+function selectWilayaOnMap(name){ showAdmin2(name); selectWilaya(name); }
+function selectMoughataaOnMap(pcode){ selectMoughataa(pcode); }
 
-document.getElementById('back-btn').addEventListener('click', showAdmin1);
-
-function selectWilayaOnMap(name){
-  showAdmin2(name);
-  selectWilaya(name);
-}
-function selectMoughataaOnMap(pcode){
-  selectMoughataa(pcode);
-}
-
-waitForGlobal('L', 6000, () => {
-  map = L.map('map', {zoomControl:true, attributionControl:false}).setView([20.5, -10.5], 5.4);
-  showAdmin1();
-}, () => {
-  document.getElementById('map').innerHTML = libFailureNotice('Map library (Leaflet)');
-});
-
-// ---- detail panel: wilaya ----
-let trendChart = null;
+// ================== detail panel ==================
 function recommend(tier, psviTier){
-  if(tier==='SEVERE') return 'Fast-track emergency feed/water support — at or near 24-yr historical low.';
-  if(tier==='HIGH') return 'Extend monitoring and pre-position feed supplementation.';
-  if(psviTier==='VERY HIGH') return 'Resource status is only moderate but livestock density is exceptional — prioritise reserve-drawdown monitoring.';
-  if(tier==='FAVOURABLE') return 'Best real score nationally or regionally as of the latest dekad.';
-  return 'Regional-average conditions — maintain standard dekadal monitoring.';
+  if(tier === 'SEVERE') return t('rec.severe');
+  if(tier === 'HIGH') return t('rec.high');
+  if(psviTier === 'VERY HIGH') return t('rec.psvi');
+  if(tier === 'FAVOURABLE') return t('rec.fav');
+  return t('rec.default');
 }
-
-function renderTrend(pcodeOrName, label){
+function renderTrend(pcodeOrName){
+  const canvas = document.getElementById('trendChart');
   if(typeof Chart === 'undefined'){
-    const canvas = document.getElementById('trendChart');
     canvas.style.display = 'none';
     let note = document.getElementById('trendChart-fallback');
-    if(!note){
-      note = document.createElement('div');
-      note.id = 'trendChart-fallback';
-      canvas.parentNode.insertBefore(note, canvas);
-    }
-    note.innerHTML = libFailureNotice('Chart library (Chart.js)');
+    if(!note){ note = document.createElement('div'); note.id = 'trendChart-fallback'; canvas.parentNode.insertBefore(note, canvas); }
+    note.innerHTML = libFailureNotice('lib.chart');
     return;
   }
   const trend = BUNDLE.trends[pcodeOrName];
-  const ctx = document.getElementById('trendChart').getContext('2d');
-  if(trendChart) trendChart.destroy();
-  if(!trend){ return; }
-  trendChart = new Chart(ctx, {
+  if(trendChart){ trendChart.destroy(); trendChart = null; }
+  if(!trend) return;
+  trendChart = new Chart(canvas.getContext('2d'), {
     type:'line',
-    data:{ labels: trend.map(p=>p.d),
+    data:{ labels: trend.map(p => p.d),
       datasets:[
-        {label:'VCI', data:trend.map(p=>p.vci), borderColor:'#4FA8C9', tension:0.25, pointRadius:2.5},
-        {label:'Severe threshold', data:trend.map(()=>35), borderColor:'#6C767B', borderDash:[4,4], pointRadius:0, borderWidth:1}
+        {label:t('chart.vci'), data:trend.map(p => p.vci), borderColor:'#4FA8C9', tension:0.25, pointRadius:2.5},
+        {label:t('chart.sevThr'), data:trend.map(() => 35), borderColor:'#6C767B', borderDash:[4,4], pointRadius:0, borderWidth:1}
       ]},
     options:{ plugins:{legend:{labels:{color:'#9AA3A8', font:{family:'IBM Plex Mono', size:10}}}},
       scales:{ x:{ticks:{color:'#6C767B', font:{size:9}}, grid:{color:'#2A3237'}},
                y:{min:0, max:100, ticks:{color:'#6C767B', font:{size:10}}, grid:{color:'#2A3237'}} } }
   });
 }
-
 function selectWilaya(name){
   const d = admin1ByName[name];
   if(!d) return;
-  document.getElementById('detail-name').textContent = d.wilaya;
-  document.getElementById('detail-sub').innerHTML = `Wilaya · ${fmtNum(Math.round(d.area_km2))} km² · <span class="tier-pill" style="background:${tierColor(d.real_tier)};color:${(d.real_tier==='MODERATE'||d.real_tier==='MODERATE-HIGH')?'#241a05':'#fff'}">${d.real_tier}</span>`;
+  sel = {kind:'w', key:name};
+  document.getElementById('detail-name').textContent = wn(d.wilaya);
+  document.getElementById('detail-sub').innerHTML = `${t('unit.wilaya')} · ${fmtNum(Math.round(d.area_km2))} ${t('unit.km2')} · ${tierPill(d.real_tier)}`;
   document.getElementById('detail-kv').innerHTML = `
-    <div class="kv-row"><span class="k">Real resource score</span><span class="v">${d.real_score?.toFixed(2) ?? '—'}</span></div>
-    <div class="kv-row"><span class="k">Season-avg VCI</span><span class="v">${d.vci_season_avg?.toFixed(1) ?? '—'}</span></div>
-    <div class="kv-row"><span class="k">3-month rainfall, % normal</span><span class="v">${d.rain3mo?.toFixed(1) ?? '—'}%</span></div>
-    <div class="kv-row"><span class="k">Livestock density</span><span class="v">${d.tlu_km2?.toFixed(2) ?? '—'} TLU/km²</span></div>
-    <div class="kv-row"><span class="k">PSVI</span><span class="v">${d.psvi ?? '—'} (${d.psvi_tier ?? 'n/a'})</span></div>
-  `;
+    <div class="kv-row"><span class="k">${t('kv.score')}</span><span class="v">${fx(d.real_score, 2)}</span></div>
+    <div class="kv-row"><span class="k">${t('kv.vci')}</span><span class="v">${fx(d.vci_season_avg, 1)}</span></div>
+    <div class="kv-row"><span class="k">${t('kv.rain')}</span><span class="v">${fx(d.rain3mo, 1)}%</span></div>
+    <div class="kv-row"><span class="k">${t('kv.density')}</span><span class="v">${fx(d.tlu_km2, 2)} ${t('unit.tlu')}</span></div>
+    <div class="kv-row"><span class="k">${t('kv.psvi')}</span><span class="v">${fx(d.psvi, 2)} (${d.psvi_tier ? t('psvi.' + d.psvi_tier) : t('na')})</span></div>`;
   document.getElementById('no-data-flag').innerHTML = '';
   document.getElementById('action-box').textContent = recommend(d.real_tier, d.psvi_tier);
-  renderTrend(d.PCODE, d.wilaya);
+  renderTrend(d.PCODE);
   renderScoreTrend('w', name);
-  document.querySelectorAll('#priorityTable tr').forEach(tr => tr.style.background = tr.dataset.wilaya===name ? 'rgba(79,168,201,0.08)' : '');
+  document.querySelectorAll('#priorityTable tr').forEach(tr => tr.style.background = tr.dataset.wilaya === name ? 'rgba(79,168,201,0.08)' : '');
 }
-
 function selectMoughataa(pcode){
   const d = admin2ByPcode[pcode];
   if(!d) return;
+  sel = {kind:'m', key:pcode};
   const hasData = d.real_tier && d.real_tier !== 'NO DATA';
   document.getElementById('detail-name').textContent = pcode;
-  document.getElementById('detail-sub').innerHTML = `Moughataa (admin-2) · ${d.wilaya || ''} · <span class="tier-pill" style="background:${tierColor(d.real_tier)};color:${(d.real_tier==='MODERATE'||d.real_tier==='MODERATE-HIGH')?'#241a05':'#fff'}">${d.real_tier || 'NO DATA'}</span>`;
+  document.getElementById('detail-sub').innerHTML = `${t('unit.mough')} · ${wn(d.wilaya || '')} · ${tierPill(d.real_tier || 'NO DATA')}`;
   if(hasData){
     document.getElementById('detail-kv').innerHTML = `
-      <div class="kv-row"><span class="k">Real resource score</span><span class="v">${d.real_score?.toFixed(2) ?? '—'}</span></div>
-      <div class="kv-row"><span class="k">Season-avg VCI</span><span class="v">${d.vci_season_avg?.toFixed(1) ?? '—'}</span></div>
-      <div class="kv-row"><span class="k">3-month rainfall, % normal</span><span class="v">${d.rain3mo?.toFixed(1) ?? '—'}%</span></div>
-    `;
+      <div class="kv-row"><span class="k">${t('kv.score')}</span><span class="v">${fx(d.real_score, 2)}</span></div>
+      <div class="kv-row"><span class="k">${t('kv.vci')}</span><span class="v">${fx(d.vci_season_avg, 1)}</span></div>
+      <div class="kv-row"><span class="k">${t('kv.rain')}</span><span class="v">${fx(d.rain3mo, 1)}%</span></div>`;
     document.getElementById('no-data-flag').innerHTML = '';
     document.getElementById('action-box').textContent = recommend(d.real_tier, null);
-    renderTrend(pcode, pcode);
+    renderTrend(pcode);
     renderScoreTrend('m', pcode);
   } else {
     document.getElementById('detail-kv').innerHTML = '';
-    document.getElementById('no-data-flag').innerHTML = '<div class="data-flag">Not covered by the current WFP NDVI/rainfall admin-2 series — a data-vintage gap, not a boundary gap. Parent wilaya tier is the best available fallback.</div>';
-    document.getElementById('action-box').textContent = 'No live signal for this moughataa yet — fall back to the parent wilaya tier shown on the national map.';
-    if(trendChart){ trendChart.destroy(); trendChart=null; }
+    document.getElementById('no-data-flag').innerHTML = `<div class="data-flag">${t('nodata.flag')}</div>`;
+    document.getElementById('action-box').textContent = t('nodata.action');
+    if(trendChart){ trendChart.destroy(); trendChart = null; }
     renderScoreTrend('w', d.wilaya);
   }
 }
+function reselect(){ if(sel.kind === 'm') selectMoughataa(sel.key); else selectWilaya(sel.key); }
 
-// ---- suitability matrix ----
-const matrixData = BUNDLE.state.admin1.filter(d => d.wilaya !== 'Nouakchott' && d.psvi !== null);
-waitForGlobal('Chart', 6000, () => {
-  new Chart(document.getElementById('matrixChart').getContext('2d'), {
-    type:'scatter',
-    data:{ datasets:[{
-      label:'Wilaya',
-      data: matrixData.map(d=>({x:d.real_score, y:d.tlu_km2, label:d.wilaya})),
-      backgroundColor: matrixData.map(d=>tierColor(d.real_tier)),
-      pointRadius: matrixData.map(d=>Math.max(5, Math.sqrt(d.tlu)/220)),
-    }]},
-    options:{
-      plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label:(ctx)=> `${ctx.raw.label}: score ${ctx.raw.x.toFixed(2)}, ${ctx.raw.y.toFixed(1)} TLU/km²`}} },
-      scales:{
-        x:{title:{display:true,text:'Real resource score', color:'#9AA3A8'}, min:0.5, max:5, ticks:{color:'#6C767B'}, grid:{color:'#2A3237'}},
-        y:{type:'logarithmic', title:{display:true,text:'TLU / km²', color:'#9AA3A8'}, ticks:{color:'#6C767B'}, grid:{color:'#2A3237'}}
+// ================== suitability matrix ==================
+function renderMatrix(){
+  const box = document.getElementById('matrixBox');
+  const rows = BUNDLE.state.admin1.filter(d => d.wilaya !== 'Nouakchott' && d.psvi !== null);
+  waitForGlobal('Chart', 6000, () => {
+    if(!document.getElementById('matrixChart')) box.innerHTML = '<canvas id="matrixChart" height="230"></canvas>';
+    if(matrixChart){ matrixChart.destroy(); matrixChart = null; }
+    matrixChart = new Chart(document.getElementById('matrixChart').getContext('2d'), {
+      type:'scatter',
+      data:{ datasets:[{
+        label:t('unit.wilaya'),
+        data: rows.map(d => ({x:d.real_score, y:d.tlu_km2, label:wn(d.wilaya)})),
+        backgroundColor: rows.map(d => tierColor(d.real_tier)),
+        pointRadius: rows.map(d => Math.max(5, Math.sqrt(d.tlu) / 220)),
+      }]},
+      options:{
+        plugins:{ legend:{display:false},
+          tooltip:{callbacks:{label:(ctx) => t('chart.tip', {w:ctx.raw.label, x:fx(ctx.raw.x, 2), y:fx(ctx.raw.y, 1)})}} },
+        scales:{
+          x:{title:{display:true, text:t('chart.score'), color:'#9AA3A8'}, min:0.5, max:5, ticks:{color:'#6C767B'}, grid:{color:'#2A3237'}},
+          y:{type:'logarithmic', title:{display:true, text:t('chart.tlu'), color:'#9AA3A8'}, ticks:{color:'#6C767B'}, grid:{color:'#2A3237'}}
+        }
       }
-    }
+    });
+  }, () => { box.innerHTML = libFailureNotice('lib.chart'); });
+}
+
+// ================== alerts ==================
+function localizeAlert(a){
+  if(LANG === 'en') return a.message;
+  const m = a.message || '';
+  const unit = a.level === 'admin1' ? wn(a.unit) : a.unit;
+  let r;
+  if(a.type === 'tier_change' && (r = m.match(/risk tier (worsened|improved) from (.+?) to (.+?) \(score ([\d.]+) -> ([\d.]+)\)/))){
+    return t('alert.tier', {u:unit, dir:t(r[1] === 'worsened' ? 'alert.dirW' : 'alert.dirI'),
+      p:tierName(r[2].trim()), c:tierName(r[3].trim()), a:fxs(r[4]), b:fxs(r[5])});
+  }
+  if(a.type === 'severe_entry' && (r = m.match(/\(score ([\d.]+)\) as of (\d{4}-\d{2}-\d{2})/))){
+    return t('alert.severe', {u:unit, x:fxs(r[1]), d:r[2]});
+  }
+  if(a.type === 'psvi_alert' && (r = m.match(/entered VERY HIGH \(([\d.]+)\)/))){
+    return t('alert.psvi', {u:unit, v:fxs(r[1])});
+  }
+  return a.message;
+}
+function renderAlerts(){
+  document.getElementById('alert-count').textContent = t('alert.count', {n: BUNDLE.alerts.length});
+  const log = document.getElementById('alertLog');
+  log.innerHTML = '';
+  const sevRank = {critical:0, high:1, medium:2, info:3};
+  [...BUNDLE.alerts].sort((a, b) => sevRank[a.severity] - sevRank[b.severity]).forEach(a => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `<span class="badge b-${a.severity}">${t('sev.' + a.severity)}</span><span dir="auto">${localizeAlert(a)}</span>`;
+    log.appendChild(row);
   });
-}, () => {
-  document.getElementById('matrixChart').outerHTML = libFailureNotice('Chart library (Chart.js)');
-});
+}
 
-// ---- alert log ----
-document.getElementById('alert-count').textContent = `${BUNDLE.alerts.length} alerts, 21 Jul -> 21 Aug 2026`;
-const log = document.getElementById('alertLog');
-const sevRank = {critical:0, high:1, medium:2, info:3};
-[...BUNDLE.alerts].sort((a,b)=>sevRank[a.severity]-sevRank[b.severity]).forEach(a=>{
-  const row = document.createElement('div');
-  row.className='row';
-  const cls = 'b-'+a.severity;
-  row.innerHTML = `<span class="badge ${cls}">${a.severity.toUpperCase()}</span><span>${a.message}</span>`;
-  log.appendChild(row);
-});
-
-// ---- priority table ----
-const tbody = document.getElementById('priorityBody');
-let sortKey='real_score', sortAsc=true;
+// ================== priority table ==================
 function renderTable(){
-  const rows = [...BUNDLE.state.admin1].filter(d=>d.wilaya!=='Nouakchott').sort((a,b)=>{
-    let av=a[sortKey], bv=b[sortKey];
-    if(typeof av==='string'){ return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av); }
-    av = av===null||av===undefined ? -Infinity : av; bv = bv===null||bv===undefined ? -Infinity : bv;
-    return sortAsc ? av-bv : bv-av;
+  const tbody = document.getElementById('priorityBody');
+  const rows = [...BUNDLE.state.admin1].filter(d => d.wilaya !== 'Nouakchott').sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if(typeof av === 'string'){ return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av); }
+    av = av === null || av === undefined ? -Infinity : av; bv = bv === null || bv === undefined ? -Infinity : bv;
+    return sortAsc ? av - bv : bv - av;
   });
-  tbody.innerHTML = rows.map(d=>`
+  tbody.innerHTML = rows.map(d => `
     <tr data-wilaya="${d.wilaya}">
-      <td>${d.wilaya}</td>
-      <td><span class="tier-pill" style="background:${tierColor(d.real_tier)};color:${(d.real_tier==='MODERATE'||d.real_tier==='MODERATE-HIGH')?'#241a05':'#fff'}">${d.real_tier}</span></td>
-      <td class="num">${d.real_score?.toFixed(2) ?? '—'}</td>
-      <td class="num">${d.psvi ?? '—'}</td>
+      <td>${wn(d.wilaya)}</td>
+      <td>${tierPill(d.real_tier)}</td>
+      <td class="num">${fx(d.real_score, 2)}</td>
+      <td class="num">${fx(d.psvi, 2)}</td>
       <td class="num">${fmtNum(Math.round(d.tlu))}</td>
     </tr>`).join('');
-  tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', ()=>{ showAdmin2(tr.dataset.wilaya); selectWilaya(tr.dataset.wilaya); }));
+  tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () => { showAdmin2(tr.dataset.wilaya); selectWilaya(tr.dataset.wilaya); }));
 }
-document.querySelectorAll('#priorityTable th').forEach(th=>{
-  th.addEventListener('click', ()=>{
-    const key = th.dataset.key;
-    if(sortKey===key) sortAsc=!sortAsc; else { sortKey=key; sortAsc=true; }
-    renderTable();
-  });
-});
-renderTable();
 
-// ---- season trend panel ----
-// Reads BUNDLE.history (built from the backfilled dekad snapshots). The table
-// needs no chart library; the chart waits for Chart.js like every other chart.
-const HIST = BUNDLE.history;
-let scoreChart = null;
-const TIER_LINES = [
-  {y:1.75, c:'#C0463B'}, {y:2.75, c:'#D98B3F'}, {y:3.25, c:'#D9A34A'}, {y:4.0, c:'#D9BC55'}
-];
-function shortDate(d){ return d.slice(5); }
+// ================== season trend panel ==================
+const TIER_LINES = [{y:1.75, c:'#C0463B'}, {y:2.75, c:'#D98B3F'}, {y:3.25, c:'#D9A34A'}, {y:4.0, c:'#D9BC55'}];
+const shortDate = d => d.slice(5);
 function fmtDelta(v){
-  if(v===null || v===undefined) return '<span>—</span>';
-  const cls = v<=-0.25 ? 'delta-neg' : (v>=0.25 ? 'delta-pos' : '');
-  return `<span class="${cls}">${v>0?'+':''}${v.toFixed(2)}</span>`;
+  if(v === null || v === undefined) return '<span>—</span>';
+  const cls = v <= -0.25 ? 'delta-neg' : (v >= 0.25 ? 'delta-pos' : '');
+  return `<span class="${cls}">${v > 0 ? '+' : ''}${fx(v, 2)}</span>`;
 }
 function dirPill(label){
-  const cls = label==='Worsening' ? 'worse' : (label==='Improving' ? 'better' : 'stable');
-  return `<span class="dir ${cls}">${label}</span>`;
+  const cls = label === 'Worsening' ? 'worse' : (label === 'Improving' ? 'better' : 'stable');
+  return `<span class="dir ${cls}">${t('dir.' + label)}</span>`;
 }
 function renderTrendBoard(){
   const body = document.getElementById('trendBody');
   const rows = (HIST && HIST.trends) ? HIST.trends : [];
   body.innerHTML = rows.map(r => `
     <tr data-wilaya="${r.wilaya}">
-      <td>${r.wilaya}</td>
-      <td class="num">${r.first_score.toFixed(2)}</td>
-      <td class="num">${r.latest_score.toFixed(2)}</td>
+      <td>${wn(r.wilaya)}</td>
+      <td class="num">${fx(r.first_score, 2)}</td>
+      <td class="num">${fx(r.latest_score, 2)}</td>
       <td class="num">${fmtDelta(r.season_change)}</td>
       <td>${dirPill(r.recent_trend)}</td>
     </tr>`).join('');
@@ -547,122 +932,125 @@ function renderTrendBoard(){
   }));
 }
 function markTrendRow(wilaya){
-  document.querySelectorAll('#trendBody tr').forEach(tr => tr.classList.toggle('sel', tr.dataset.wilaya===wilaya));
+  document.querySelectorAll('#trendBody tr').forEach(tr => tr.classList.toggle('sel', tr.dataset.wilaya === wilaya));
 }
 function renderScoreTrend(kind, key){
-  const panel = document.getElementById('trend-panel');
+  const layout = document.getElementById('trend-layout');
+  const empty = document.getElementById('trend-empty');
   if(!HIST || !HIST.dates || HIST.dates.length < 2){
-    document.getElementById('trend-body').innerHTML =
-      '<div style="padding:24px;color:var(--text-muted);font-size:12.5px;line-height:1.7;">Trend history is not available yet. It is built from saved dekad snapshots; once the pipeline has run with the backfill step, this panel fills in automatically.</div>';
+    layout.style.display = 'none'; empty.style.display = 'block';
     return;
   }
+  layout.style.display = ''; empty.style.display = 'none';
   let title, sub, wilaya, hi, parent = null;
-  if(kind==='m' && HIST.admin2[key]){
+  if(kind === 'm' && HIST.admin2[key]){
     const m = HIST.admin2[key];
     wilaya = m.wilaya; hi = m.scores; parent = HIST.admin1[wilaya] || null;
-    title = key + ' (moughataa, ' + wilaya + ')';
+    title = t('trend.mough', {code:key, w:wn(wilaya)});
   } else {
-    wilaya = (kind==='m') ? ((admin2ByPcode[key]||{}).wilaya || key) : key;
-    hi = HIST.admin1[wilaya]; title = wilaya;
+    wilaya = (kind === 'm') ? ((admin2ByPcode[key] || {}).wilaya || key) : key;
+    hi = HIST.admin1[wilaya]; title = wn(wilaya);
   }
   markTrendRow(wilaya);
-  const t = (HIST.trends||[]).find(r => r.wilaya===wilaya);
-  const vals = (hi||[]).filter(v => v!==null);
+  const row = (HIST.trends || []).find(r => r.wilaya === wilaya);
+  const vals = (hi || []).filter(v => v !== null);
   if(vals.length){
-    const change = vals[vals.length-1] - vals[0];
-    sub = `${shortDate(HIST.dates[0])} to ${shortDate(HIST.dates[HIST.dates.length-1])}: ${vals[0].toFixed(2)} to ${vals[vals.length-1].toFixed(2)} (${change>0?'+':''}${change.toFixed(2)})` +
-          (t && kind!=='m' ? ` · last 3 dekads: ${t.recent_trend.toLowerCase()}` : '');
-  } else { sub = 'No history for this unit.'; }
+    const change = vals[vals.length - 1] - vals[0];
+    sub = t('trend.sub', {a:shortDate(HIST.dates[0]), b:shortDate(HIST.dates[HIST.dates.length - 1]),
+                          x:fx(vals[0], 2), y:fx(vals[vals.length - 1], 2), c:(change > 0 ? '+' : '') + fx(change, 2)}) +
+          (row && kind !== 'm' ? t('trend.subRecent', {t: lc(t('dir.' + row.recent_trend))}) : '');
+  } else { sub = t('trend.none'); }
   document.getElementById('trendChartTitle').textContent = title;
   document.getElementById('trendChartSub').textContent = sub;
 
   const box = document.getElementById('scoreTrendBox');
-  if(typeof Chart === 'undefined'){
-    box.innerHTML = libFailureNotice('Chart library (Chart.js)');
-    return;
-  }
+  if(typeof Chart === 'undefined'){ box.innerHTML = libFailureNotice('lib.chart'); return; }
   if(!document.getElementById('scoreTrendChart')){ box.innerHTML = '<canvas id="scoreTrendChart" height="190"></canvas>'; }
   if(scoreChart){ scoreChart.destroy(); scoreChart = null; }
   const labels = HIST.dates.map(shortDate);
   const datasets = [];
   Object.keys(HIST.admin1).forEach(w => {
-    if(w===wilaya && kind!=='m') return;
-    datasets.push({label:w, data:HIST.admin1[w], borderColor:'rgba(154,163,168,0.28)', borderWidth:1,
+    if(w === wilaya && kind !== 'm') return;
+    datasets.push({label:wn(w), data:HIST.admin1[w], borderColor:'rgba(154,163,168,0.28)', borderWidth:1,
                    pointRadius:0, tension:0.2, spanGaps:true, order:5});
   });
-  if(kind==='m' && parent){
-    datasets.push({label:wilaya+' (wilaya)', data:parent, borderColor:'#D9BC55', borderWidth:2, borderDash:[6,3],
+  if(kind === 'm' && parent){
+    datasets.push({label:t('trend.parent', {w:wn(wilaya)}), data:parent, borderColor:'#D9BC55', borderWidth:2, borderDash:[6,3],
                    pointRadius:0, tension:0.2, spanGaps:true, order:2});
   }
   datasets.push({label:title, data:hi, borderColor:'#4FA8C9', backgroundColor:'#4FA8C9', borderWidth:3,
                  pointRadius:3.5, tension:0.2, spanGaps:true, order:1});
-  TIER_LINES.forEach(tl => datasets.push({label:'tier '+tl.y, data:labels.map(()=>tl.y), borderColor:tl.c,
+  TIER_LINES.forEach(tl => datasets.push({label:'tier ' + tl.y, data:labels.map(() => tl.y), borderColor:tl.c,
                  borderWidth:1, borderDash:[4,4], pointRadius:0, order:6}));
   scoreChart = new Chart(document.getElementById('scoreTrendChart').getContext('2d'), {
     type:'line', data:{labels, datasets},
     options:{
       animation:false,
-      plugins:{legend:{display:false}, tooltip:{filter:(item)=> !String(item.dataset.label).startsWith('tier ')}},
+      plugins:{legend:{display:false}, tooltip:{filter:(item) => !String(item.dataset.label).startsWith('tier ')}},
       scales:{
         x:{ticks:{color:'#6C767B', font:{size:10}}, grid:{color:'#2A3237'}},
         y:{min:0.8, max:5, ticks:{color:'#6C767B', font:{size:10}}, grid:{color:'#2A3237'},
-           title:{display:true, text:'Real resource score', color:'#9AA3A8', font:{size:10}}}
+           title:{display:true, text:t('chart.score'), color:'#9AA3A8', font:{size:10}}}
       }
     }
   });
 }
-renderTrendBoard();
 
-// ---- decision panel: a plain-language message generated from the data ----
-// Nothing here is typed text. Every name, number and count comes from
-// BUNDLE.history (season trends) and BUNDLE.state (current tiers, PSVI), so the
-// message stays correct as each new dekad arrives.
-const NUM_WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const nw = n => (n >= 0 && n <= 20) ? NUM_WORDS[n] : String(n);
+// ================== decision panel ==================
+// Nothing here is typed text. Every name, number and count comes from BUNDLE.history
+// (season trends) and BUNDLE.state (current tiers, PSVI), so the message stays correct
+// as each new dekad arrives, and it is written in whichever language is selected.
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-const joinList = a => a.length <= 1 ? a.join('') : a.slice(0,-1).join(', ') + ' and ' + a[a.length-1];
-const monthOf = d => MONTH_NAMES[parseInt(d.slice(5,7),10) - 1];
+function joinList(a){
+  if(a.length <= 1) return a.join('');
+  if(LANG === 'ar') return a.slice(0, -1).join('، ') + ' و' + a[a.length - 1];
+  return a.slice(0, -1).join(', ') + (LANG === 'fr' ? ' et ' : ' and ') + a[a.length - 1];
+}
+function countWord(n){ const arr = NUMW[LANG]; return (arr && n >= 0 && n <= 20) ? arr[n] : String(n); }
+function arWil(n){ return n === 1 ? 'ولاية واحدة' : n === 2 ? 'ولايتان' : (n >= 3 && n <= 10 ? n + ' ولايات' : n + ' ولاية'); }
+const monthOf = d => MONTHS[LANG][parseInt(d.slice(5, 7), 10) - 1];
 
 function buildDecision(){
   const wil = BUNDLE.state.admin1.filter(d => d.wilaya !== 'Nouakchott');
   const byName = {}; wil.forEach(d => byName[d.wilaya] = d);
   const sev  = wil.filter(d => d.real_tier === 'SEVERE').map(d => d.wilaya);
   const high = wil.filter(d => d.real_tier === 'HIGH').map(d => d.wilaya);
+  const names = a => joinList(a.map(wn));
   const msg = [], actions = [];
   let basis = '';
 
   if(!HIST || !HIST.trends || !HIST.trends.length){
-    msg.push(sev.length
-      ? `${cap(nw(sev.length))} wilaya${sev.length>1?'s are':' is'} currently at severe risk: ${joinList(sev)}. Season trend analysis is not available yet; it appears here once the pipeline has built the dekad history.`
-      : 'Season trend analysis is not available yet; it appears here once the pipeline has built the dekad history.');
+    msg.push(sev.length === 0 ? t('d.fb0')
+           : sev.length === 1 ? t('d.fb1', {l:names(sev)})
+           : t('d.fbN', {n:cap(countWord(sev.length)), nWil:arWil(sev.length), l:names(sev)}));
   } else {
     const T = HIST.trends, total = T.length;
     const first = HIST.dates[0], last = HIST.dates[HIST.dates.length - 1];
     const sameMonth = monthOf(first) === monthOf(last);
-    const from = sameMonth ? 'on ' + first.slice(5) : 'in ' + monthOf(first);
-    const to   = sameMonth ? 'on ' + last.slice(5)  : 'by ' + monthOf(last);
-    const f2 = v => v.toFixed(2);
+    const from = sameMonth ? t('d.fromOn', {d:first.slice(5)}) : t('d.fromIn', {m:monthOf(first)});
+    const to   = sameMonth ? t('d.toOn', {d:last.slice(5)})   : t('d.toIn', {m:monthOf(last)});
 
     // 1. how many are worsening
     const worse = T.filter(r => r.season_trend === 'Worsening');
-    msg.push(
-      worse.length === 0 ? 'No wilaya is worsening over the season.'
-      : worse.length === total ? `All ${nw(total)} wilayas are worsening over the season.`
-      : `${cap(nw(worse.length))} of ${nw(total)} wilayas are worsening over the season.`);
+    const cw = {n:cap(countWord(worse.length)), nWil:arWil(worse.length), total:countWord(total)};
+    msg.push(worse.length === 0 ? t('d.none')
+           : worse.length === total ? t('d.all', cw)
+           : worse.length === 1 ? t('d.some1', cw)
+           : t('d.some', cw));
 
     // 2. steepest fall, then the most livestock-pressured wilaya if it is a different one
-    const steepest = [...T].sort((a,b) => a.season_change - b.season_change)[0];
+    const steepest = [...T].sort((a, b) => a.season_change - b.season_change)[0];
     let s2 = '';
     if(steepest && steepest.season_change < 0){
-      const t = byName[steepest.wilaya];
-      s2 = `The steepest fall is ${steepest.wilaya}, from ${f2(steepest.first_score)} ${from} to ${f2(steepest.latest_score)} ${to}` +
-           (t ? ` (now ${t.real_tier.toLowerCase()})` : '') + '.';
+      const cur = byName[steepest.wilaya];
+      s2 = t('d.steep', {w:wn(steepest.wilaya), a:fx(steepest.first_score, 2), b:fx(steepest.latest_score, 2), from, to,
+                         now: cur ? t('d.now', {t:lc(tierName(cur.real_tier))}) : ''});
     }
     const pressured = [...T].filter(r => byName[r.wilaya] && byName[r.wilaya].psvi != null)
-                            .sort((a,b) => byName[b.wilaya].psvi - byName[a.wilaya].psvi)[0];
+                            .sort((a, b) => byName[b.wilaya].psvi - byName[a.wilaya].psvi)[0];
     if(pressured && (!steepest || pressured.wilaya !== steepest.wilaya) && pressured.season_change < 0){
-      s2 += ` ${pressured.wilaya}, the most livestock-pressured wilaya (PSVI ${byName[pressured.wilaya].psvi.toFixed(1)}), fell from ${f2(pressured.first_score)} ${from} to ${f2(pressured.latest_score)} ${to}.`;
+      s2 += t('d.press', {w:wn(pressured.wilaya), p:fx(byName[pressured.wilaya].psvi, 1),
+                          a:fx(pressured.first_score, 2), b:fx(pressured.latest_score, 2), from, to});
     }
     if(s2) msg[0] += ' ' + s2.trim();
 
@@ -670,48 +1058,73 @@ function buildDecision(){
     const R = T.filter(r => r.recent_trend === 'Improving' && r.season_change < 0).map(r => r.wilaya);
     const U = T.filter(r => r.season_change > 0).map(r => r.wilaya);
     let s3 = '';
-    if(R.length){
-      const both = R.length === 2 ? 'both are' : (R.length > 2 ? 'all are' : 'it is');
-      s3 = `${joinList(R)} ${R.length>1?'have':'has'} ticked up over the last three dekads, but ${both} still below ${R.length>1?'where they':'where it'} started.`;
-    }
-    if(U.length === 1) s3 += ` ${U[0]} is the only wilaya that ended the season higher than it began.`;
-    else if(U.length > 1) s3 += ` ${joinList(U)} ended the season higher than they began.`;
-    else s3 += ' No wilaya ended the season higher than it began.';
+    if(R.length) s3 = t(R.length === 1 ? 'd.tick1' : (R.length === 2 ? 'd.tick2' : 'd.tickN'), {list:names(R)});
+    if(U.length === 1) s3 += ' ' + t('d.only', {w:wn(U[0])});
+    else if(U.length > 1) s3 += ' ' + t('d.several', {list:names(U)});
+    else s3 += ' ' + t('d.noneUp');
     msg.push(s3.trim());
 
     // what this means: rule-based pointers that mirror the report's priorities
     const pr1 = sev.concat(high);
-    if(pr1.length){
-      actions.push({tag:'act', cls:'act', text:
-        `Prioritise emergency feed and water support in ${joinList(sev)}${sev.length?' (severe)':''}` +
-        (high.length ? `${sev.length?', then ':''}${joinList(high)} (high)` : '') + '.'});
-    }
+    if(sev.length && high.length) actions.push({tag:t('d.actTag'), cls:'act', text:t('d.actBoth', {s:names(sev), h:names(high)})});
+    else if(sev.length) actions.push({tag:t('d.actTag'), cls:'act', text:t('d.actSev', {s:names(sev)})});
+    else if(high.length) actions.push({tag:t('d.actTag'), cls:'act', text:t('d.actHigh', {h:names(high)})});
+
     const vh = wil.filter(d => d.psvi_tier === 'VERY HIGH' && !pr1.includes(d.wilaya)).map(d => d.wilaya);
     if(vh.length){
       const declining = vh.filter(n => { const r = T.find(x => x.wilaya === n); return r && r.season_trend === 'Worsening'; });
-      actions.push({tag:'watch', cls:'watch', text:
-        `Monitor reserve drawdown in ${joinList(vh)}: very high livestock pressure${declining.length===vh.length?' on a declining resource base':''}, and the likely destinations for displaced herds.`});
+      actions.push({tag:t('d.watchTag'), cls:'watch', text:t(declining.length === vh.length ? 'd.watchDecl' : 'd.watch', {l:names(vh)})});
     }
-    if(U.length){
-      actions.push({tag:'re-check', cls:'check', text:
-        `Re-check before committing new resources in ${joinList(U)}: ${U.length>1?'their scores are':'its score is'} higher than at the start of the season.`});
-    }
-    basis = `Based on ${HIST.dates.length} dekads, ${first} to ${last} (latest dekad with data: ${BUNDLE.state.as_of}). `;
+    if(U.length) actions.push({tag:t('d.checkTag'), cls:'check', text:t(U.length > 1 ? 'd.checkN' : 'd.check1', {l:names(U)})});
+    basis = t('d.basis', {n:HIST.dates.length, a:first, b:last, d:BUNDLE.state.as_of});
   }
-  basis += 'Generated by rules from the data on this page; treat it as a prompt for review, not an instruction.';
+  basis += t('d.basisTail');
   return {msg, actions, basis};
 }
 function renderDecision(){
   const d = buildDecision();
   document.getElementById('decision-msg').innerHTML = d.msg.map(p => `<p>${p}</p>`).join('');
   document.getElementById('decision-actions').innerHTML = d.actions.map(a =>
-    `<div class="dec-row"><span class="dec-tag ${a.cls}">${a.tag.toUpperCase()}</span><span>${a.text}</span></div>`).join('');
+    `<div class="dec-row"><span class="dec-tag ${a.cls}">${a.tag}</span><span>${a.text}</span></div>`).join('');
   document.getElementById('decision-basis').textContent = d.basis;
 }
-renderDecision();
 
-// showAdmin1() is now called automatically once Leaflet is confirmed loaded (see waitForGlobal('L', ...) above)
-selectWilaya('Adrar');
+// ================== apply language to everything ==================
+function applyLang(){
+  applyStatic();
+  renderHeader();
+  renderStrip();
+  renderEngineNote();
+  renderBreadcrumb();
+  renderAlerts();
+  renderTable();
+  renderTrendBoard();
+  renderDecision();
+  renderMatrix();
+  if(mapFailed) document.getElementById('map').innerHTML = libFailureNotice('lib.map');
+  reselect();
+}
+
+// ================== boot ==================
+document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+document.getElementById('back-btn').addEventListener('click', showAdmin1);
+document.querySelectorAll('#priorityTable th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if(sortKey === key) sortAsc = !sortAsc; else { sortKey = key; sortAsc = true; }
+    renderTable();
+  });
+});
+LANG = initialLang();
+applyLang();
+waitForGlobal('L', 6000, () => {
+  map = L.map('map', {zoomControl:true, attributionControl:false}).setView([20.5, -10.5], 5.4);
+  showAdmin1();
+}, () => {
+  mapFailed = true;
+  document.getElementById('map').innerHTML = libFailureNotice('lib.map');
+});
+
 </script>
 </body>
 </html>
