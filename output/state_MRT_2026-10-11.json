@@ -2,7 +2,7 @@
   "country": "Mauritania",
   "country_iso": "MRT",
   "as_of": "2026-10-11",
-  "generated_at": "2026-11-11T22:09:08.549835+00:00",
+  "generated_at": "2026-11-12T15:52:13.058840+00:00",
   "admin1": [
     {
       "PCODE": "MR01",
@@ -539,5 +539,5 @@
   "n_admin1": 13,
   "n_admin2_total": 45,
   "n_admin2_with_data": 45,
-  "content_hash": "4d70bc622e256873"
+  "content_hash": "0c82ed3efeba662a"
 }
