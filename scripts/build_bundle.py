@@ -47,6 +47,37 @@ def build_trends(ndvi_csv, as_of, season_start="2026-06-01"):
     return trends
 
 
+def load_history(history_csv, trends_csv):
+    """Season history for the cockpit's trend panel, from the files written by
+    backfill_history.py and build_trends.py. Returns None if they are missing,
+    in which case the panel shows a short 'not available yet' note instead."""
+    import pandas as pd
+    if not history_csv or not Path(history_csv).exists():
+        return None
+    h = pd.read_csv(history_csv)
+    dates = sorted(h["date"].unique())
+
+    def series(sub):
+        s = sub.set_index("date")["real_score"].reindex(dates)
+        return [None if pd.isna(v) else round(float(v), 2) for v in s]
+
+    a1, a2 = {}, {}
+    for name, sub in h[(h.level == "admin1") & (h.name != "Nouakchott")].groupby("name"):
+        vals = series(sub)
+        if any(v is not None for v in vals):
+            a1[name] = vals
+    for code, sub in h[h.level == "admin2"].groupby("code"):
+        vals = series(sub)
+        if any(v is not None for v in vals):
+            a2[code] = {"wilaya": sub["wilaya"].iloc[0], "scores": vals}
+
+    rows = []
+    if trends_csv and Path(trends_csv).exists():
+        t = pd.read_csv(trends_csv)
+        rows = json.loads(t.astype(object).where(t.notna(), None).to_json(orient="records"))
+    return {"dates": dates, "admin1": a1, "admin2": a2, "trends": rows}
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True)
@@ -58,6 +89,8 @@ if __name__ == "__main__":
                          help="Optional data/fetch_manifest.json from fetch_hdx_data.py - carries HDX's "
                               "own 'last modified' timestamp per resource, distinct from the latest dekad "
                               "actually present in the data (the cockpit shows both, since they can differ).")
+    parser.add_argument("--history", default=None, help="output/history_<ISO>.csv from backfill_history.py (for the trend panel)")
+    parser.add_argument("--trends", default=None, help="output/trends_<ISO>.csv from build_trends.py (for the trend panel)")
     parser.add_argument("--out-dir", default="output")
     parser.add_argument("--bundle-out", default="cockpit/bundle.json")
     args = parser.parse_args()
@@ -101,8 +134,14 @@ if __name__ == "__main__":
         print("No fetch manifest found (expected if data/manual/ was used instead of the live HDX fetch) - "
               "the cockpit's 'HDX resource last touched' badge will be omitted for this run.")
 
+    history = load_history(args.history, args.trends)
+    if history:
+        print(f"Trend history loaded: {len(history['dates'])} dekads, {len(history['admin1'])} wilayas, {len(history['admin2'])} moughataas")
+    else:
+        print("No trend history found - the cockpit's trend panel will show a 'not available yet' note.")
+
     bundle = {"state": state, "admin1_geo": admin1_geo, "admin2_geo": admin2_geo, "trends": trends,
-              "alerts": alerts, "fetch_manifest": fetch_manifest}
+              "alerts": alerts, "fetch_manifest": fetch_manifest, "history": history}
 
     out_path = Path(args.bundle_out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
