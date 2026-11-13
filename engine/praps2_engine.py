@@ -205,7 +205,12 @@ def build_state(config, as_of):
         "n_admin2_total": len(a2),
         "n_admin2_with_data": int(a2["real_score"].notna().sum()),
     }
-    state_str = json.dumps(state, sort_keys=True)
+    # Hash everything EXCEPT generated_at - that timestamp is different on
+    # every run by definition, so including it would mean content_hash
+    # never matches a previous run even when the underlying data is
+    # identical, defeating every "skip if unchanged" check downstream.
+    hashable = {k: v for k, v in state.items() if k != "generated_at"}
+    state_str = json.dumps(hashable, sort_keys=True)
     state["content_hash"] = hashlib.sha256(state_str.encode()).hexdigest()[:16]
     return state
 
