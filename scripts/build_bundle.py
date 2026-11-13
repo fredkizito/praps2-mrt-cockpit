@@ -105,18 +105,37 @@ if __name__ == "__main__":
     state_path = save_state(state, args.out_dir)
     print(f"State written: {state_path} (content_hash={state['content_hash']})")
 
+    # The alert list describes the last REAL change in the data. It is saved when
+    # that change is detected and reused when a run only republishes (for example
+    # a template edit on unchanged data), so a redeploy never wipes the alert log.
+    alerts_file = Path(args.out_dir) / f"alerts_{cfg['country_iso']}_latest.json"
+
+    def load_saved_alerts():
+        if alerts_file.exists():
+            try:
+                with open(alerts_file) as af:
+                    return json.load(af).get("alerts", [])
+            except Exception:
+                return []
+        return []
+
     alerts = []
     if args.prev_state and Path(args.prev_state).exists():
         with open(args.prev_state) as f:
             prev = json.load(f)
         if prev.get("content_hash") == state["content_hash"]:
-            print("No change since previous state (identical content_hash) - skipping alert generation.")
+            alerts = load_saved_alerts()
+            print(f"No change since previous state (identical content_hash) - keeping the {len(alerts)} alert(s) saved from the last real change.")
         else:
             alerts = diff_states(prev, state, key="wilaya", level="admin1")
             alerts += diff_states(prev, state, key="PCODE", level="admin2")
             print(f"{len(alerts)} alert(s) generated vs. previous state.")
+            Path(args.out_dir).mkdir(parents=True, exist_ok=True)
+            with open(alerts_file, "w") as af:
+                json.dump({"as_of": as_of, "generated_at": state["generated_at"], "alerts": alerts}, af)
     else:
-        print("No previous state supplied - first run, no alerts to diff.")
+        alerts = load_saved_alerts()
+        print(f"No previous state supplied - reusing {len(alerts)} saved alert(s) if any (nothing to diff against).")
 
     trends = build_trends(cfg["ndvi_csv"], as_of, cfg.get("season_start", "2026-06-01"))
 
