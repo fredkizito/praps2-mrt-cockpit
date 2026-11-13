@@ -1,13 +1,13 @@
 wilaya,first_dekad,first_score,latest_dekad,latest_score,season_change,last_3_dekads_change,season_trend,recent_trend,lowest_score,lowest_on,latest_tier
-Adrar,2026-06-01,2.23,2026-10-11,1.52,-0.71,0.17,Worsening,Stable,1.35,2026-09-01,SEVERE
-Dakhlet Nouadhibou,2026-06-01,2.88,2026-10-11,1.88,-1.0,0.88,Worsening,Improving,1.0,2026-09-11,HIGH
-Inchiri,2026-06-01,2.88,2026-10-11,2.0,-0.88,0.35,Worsening,Improving,1.65,2026-08-11,HIGH
-Guidimakha,2026-06-01,4.5,2026-10-11,2.5,-2.0,0.17,Worsening,Stable,2.33,2026-09-11,HIGH
-Tagant,2026-06-01,3.2,2026-10-11,2.5,-0.7,0.0,Worsening,Stable,2.17,2026-08-21,HIGH
-Brakna,2026-06-01,3.85,2026-10-11,2.85,-1.0,-0.3,Worsening,Worsening,2.5,2026-09-21,MODERATE-HIGH
-Gorgol,2026-06-01,4.5,2026-10-11,2.85,-1.65,0.35,Worsening,Improving,2.5,2026-09-11,MODERATE-HIGH
-Tiris Zemmour,2026-06-01,2.88,2026-10-11,2.88,0.0,0.36,Stable,Improving,2.52,2026-08-11,MODERATE-HIGH
-Hodh El Gharbi,2026-06-01,4.5,2026-10-11,3.5,-1.0,-0.12,Worsening,Stable,3.15,2026-09-21,MODERATE
-Hodh Chargui,2026-06-01,3.2,2026-10-11,3.5,0.3,-0.65,Improving,Worsening,2.5,2026-07-01,MODERATE
-Assaba,2026-06-01,4.5,2026-10-11,3.5,-1.0,0.53,Worsening,Improving,2.97,2026-07-11,MODERATE
-Trarza,2026-06-01,3.85,2026-10-11,4.5,0.65,0.88,Improving,Improving,2.97,2026-07-01,FAVOURABLE
+Adrar,2026-06-01,2.23,2026-11-01,1.52,-0.71,0.0,Worsening,Stable,1.35,2026-09-01,SEVERE
+Dakhlet Nouadhibou,2026-06-01,2.88,2026-11-01,1.88,-1.0,-0.64,Worsening,Worsening,1.0,2026-09-11,HIGH
+Inchiri,2026-06-01,2.88,2026-11-01,2.0,-0.88,0.0,Worsening,Stable,1.65,2026-08-11,HIGH
+Brakna,2026-06-01,3.85,2026-11-01,2.5,-1.35,-0.35,Worsening,Worsening,2.5,2026-09-21,HIGH
+Tagant,2026-06-01,3.2,2026-11-01,2.5,-0.7,0.0,Worsening,Stable,2.17,2026-08-21,HIGH
+Gorgol,2026-06-01,4.5,2026-11-01,2.5,-2.0,-0.35,Worsening,Worsening,2.5,2026-09-11,HIGH
+Tiris Zemmour,2026-06-01,2.88,2026-11-01,2.88,0.0,0.0,Stable,Stable,2.52,2026-08-11,MODERATE-HIGH
+Guidimakha,2026-06-01,4.5,2026-11-01,2.97,-1.53,0.12,Worsening,Stable,2.33,2026-09-11,MODERATE-HIGH
+Assaba,2026-06-01,4.5,2026-11-01,3.15,-1.35,-0.35,Worsening,Worsening,2.97,2026-07-11,MODERATE-HIGH
+Hodh Chargui,2026-06-01,3.2,2026-11-01,3.5,0.3,-0.35,Improving,Worsening,2.5,2026-07-01,MODERATE
+Hodh El Gharbi,2026-06-01,4.5,2026-11-01,3.5,-1.0,0.0,Worsening,Stable,3.15,2026-09-21,MODERATE
+Trarza,2026-06-01,3.85,2026-11-01,3.8,-0.05,-0.7,Stable,Worsening,2.97,2026-07-01,MODERATE
