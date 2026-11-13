@@ -9,9 +9,31 @@ on:
   schedule:
     - cron: "0 6 3,13,23 * *"   # 06:00 UTC on the 3rd/13th/23rd - a 2-day buffer after each dekad
   push:
+    branches: [main]
     paths:
-      - "data/manual/**"         # manual CSV drop - see data/manual/README.md
-  workflow_dispatch: {}          # manual "Run workflow" button
+      - "data/manual/**"              # manual CSV drop - see data/manual/README.md
+      - "cockpit/cockpit_template.html"  # dashboard edits go live on their own
+      - "cockpit/admin1.json"
+      - "cockpit/admin2.json"
+      - "scripts/**"
+      - "engine/**"
+      - "bot/**"
+      - "ch_packet/**"
+      - "config/**"
+      - "requirements.txt"
+  workflow_dispatch:
+    inputs:
+      force_redeploy:
+        description: "Rebuild and redeploy even if the data has not changed"
+        type: boolean
+        default: false
+
+# One run at a time. A run already in progress is never cancelled; if several
+# pushes arrive while it runs (for example uploading several files in a row),
+# only the newest waits its turn. This also stops runs overlapping each other.
+concurrency:
+  group: praps2-refresh
+  cancel-in-progress: false
 
 permissions:
   contents: write               # needed to commit the refreshed state/cockpit back to the repo
@@ -84,8 +106,25 @@ jobs:
             --bundle-out cockpit/bundle.json
           echo "changed=$(cat bundle_changed.flag)" >> "$GITHUB_OUTPUT"
 
+      - name: Decide what to publish
+        id: gate
+        run: |
+          # publish = re-render the cockpit, commit and deploy.
+          # It happens when the DATA changed, or when this run was started by a push
+          # (a template/code/CSV edit) or by "Run workflow" with force ticked.
+          FORCED=false
+          if [ "${{ github.event_name }}" = "push" ]; then FORCED=true; fi
+          if [ "${{ github.event.inputs.force_redeploy }}" = "true" ]; then FORCED=true; fi
+          echo "event=${{ github.event_name }} data_changed=${{ steps.bundle.outputs.changed }} forced=$FORCED"
+          if [ "${{ steps.bundle.outputs.changed }}" = "true" ] || [ "$FORCED" = "true" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing new to publish: data unchanged and no code/template edit."
+          fi
+
       - name: Render the cockpit HTML
-        if: steps.bundle.outputs.changed == 'true'
+        if: steps.gate.outputs.publish == 'true'
         run: |
           python3 scripts/render_cockpit.py \
             --template cockpit/cockpit_template.html \
@@ -115,7 +154,7 @@ jobs:
             --slack-webhook "$SLACK_WEBHOOK_URL"
 
       - name: Commit refreshed data back to the repo
-        if: steps.bundle.outputs.changed == 'true' || steps.hist.outputs.added == 'true'
+        if: steps.gate.outputs.publish == 'true' || steps.hist.outputs.added == 'true'
         run: |
           git config user.name "praps2-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -137,7 +176,7 @@ jobs:
           done
 
       - name: Debug - confirm Netlify secrets actually reach this job
-        if: steps.bundle.outputs.changed == 'true'
+        if: steps.gate.outputs.publish == 'true'
         env:
           NAT: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NSI: ${{ secrets.NETLIFY_SITE_ID }}
@@ -160,7 +199,7 @@ jobs:
           fi
 
       - name: Deploy to Netlify directly
-        if: steps.bundle.outputs.changed == 'true'
+        if: steps.gate.outputs.publish == 'true'
         uses: nwtgck/actions-netlify@v3
         with:
           publish-dir: deploy
